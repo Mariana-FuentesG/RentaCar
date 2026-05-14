@@ -13,13 +13,13 @@ import java.time.LocalDate;
 
 public class ClienteRequestDTO {
 
-    private Integer id;
+    //private Integer id; - preguntar al profe
 
     @NotBlank(message = "El nombre es obligatorio")
     @Size(min =2, max = 100)
     private String nombreCompleto;
 
-    @NotBlank(message = "El rut es obligatorio")
+    @NotNull(message = "El rut es obligatorio")
     private Integer rut;
 
     @NotBlank(message = "El email es obligatorio")
@@ -27,7 +27,7 @@ public class ClienteRequestDTO {
     private String email;
 
     @NotBlank(message = "El teléfono es obligatorio")
-    @Size(min =2, max = 10)
+    @Size(min =2, max = 10, message = "El telefono debe tener entre 2 y 10 caracteres")
     private String telefono;
 
     @NotNull(message = "El estado es obligatorio")

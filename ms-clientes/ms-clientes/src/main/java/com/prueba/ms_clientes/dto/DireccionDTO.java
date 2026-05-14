@@ -21,4 +21,8 @@ public class DireccionDTO {
     private Integer codigoPostal;
     private Boolean estado;
     private LocalDate fechaRegistro;
+
+    //Relación con cliente
+    private Integer clienteId;
+    private String nombreCliente;
 }
