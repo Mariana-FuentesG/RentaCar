@@ -1,7 +1,6 @@
 package com.prueba.ms_clientes.mapper;
 
 import com.prueba.ms_clientes.dto.DireccionDTO;
-import com.prueba.ms_clientes.dto.DireccionRequestDTO;
 import com.prueba.ms_clientes.model.Direccion;
 
 public class DireccionMapper {
@@ -23,7 +22,7 @@ public class DireccionMapper {
     }
 
     public static Direccion toEntity(DireccionRequestDTO dto){
-        return Direccion.builder()
+        return Direccion.builder() //modificar
                 .calle(dto.getCalle())
                 .comuna(dto.getComuna())
                 .numeroCasa(dto.getNumeroCasa())

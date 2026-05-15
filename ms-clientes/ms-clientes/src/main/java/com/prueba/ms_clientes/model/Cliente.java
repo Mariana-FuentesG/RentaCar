@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +21,11 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
-    private String nombreCompleto;
-
     @Column(nullable = false,unique = true)
     private Integer rut;
+
+    @Column(nullable = false)
+    private String nombreCompleto;
 
     @Column(nullable = false,unique = true)
     private String email;
@@ -42,4 +41,5 @@ public class Cliente {
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Direccion> direcciones = new ArrayList<>();
+
 }
