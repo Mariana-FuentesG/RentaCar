@@ -23,10 +23,10 @@ public class Direccion {
     private String calle ;
 
     @Column(nullable = false)
-    private String comuna;
+    private Integer numeroCasa;
 
     @Column(nullable = false)
-    private Integer numeroCasa;
+    private String ciudad;
 
     @Column(nullable = false)
     private Integer codigoPostal;
@@ -38,7 +38,7 @@ public class Direccion {
     private LocalDate fechaRegistro;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cliente_id")
+    @JoinColumn(name = "Cliente_Id")
     private Cliente cliente;
 
 }

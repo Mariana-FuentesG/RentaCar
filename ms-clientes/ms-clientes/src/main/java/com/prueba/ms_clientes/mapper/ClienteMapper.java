@@ -13,7 +13,7 @@ public class ClienteMapper {
                 cliente.getTelefono(),
                 cliente.getActivo(),
                 cliente.getFechaRegistro(),
-                null
+                null //la lista de direcciones del cliente
         );
     }
 
@@ -26,7 +26,7 @@ public class ClienteMapper {
                 dto.getTelefono(),
                 dto.getActivo(),
                 dto.getFechaRegistro(),
-                null
+                null //la lista de direcciones del cliente
         );
     }
 }

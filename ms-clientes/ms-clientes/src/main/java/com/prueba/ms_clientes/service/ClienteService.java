@@ -26,7 +26,7 @@ public class ClienteService {
     }
 
     // POST /api/v1/clientes → guarda un nuevo cliente recibido como DTO
-    public ClienteDTO guardar(ClienteDTO dto) {
+    public ClienteDTO guardarCliente(ClienteDTO dto) {
         Cliente cliente = ClienteMapper.toEntity(dto);
         Cliente guardado = clienteRepository.save(cliente);
         return ClienteMapper.toDTO(guardado);
@@ -39,13 +39,17 @@ public class ClienteService {
                 .map(ClienteMapper::toDTO)
                 .collect(Collectors.toList());
     }
-
-    /* public ClienteDTO buscarClienteEmail(String email){
-        return clienteRepository.findByEmailContainingIgnoreCase(email)
-                .map(ClienteMapper::toDTO)
+    //GET → OBTENER CLIENTE POR ID
+    public ClienteDTO obtenerClientePorId(Integer id){
+        Cliente cliente = clienteRepository.findById(id)
                 .orElse(null);
-    }*/
+        if(cliente == null){return null;
+        }
+        return ClienteMapper.toDTO(cliente);
+    }
 
+
+    // GET actualizar cliente
     public ClienteDTO actualizarCliente(Integer id, ClienteDTO dto){
         Cliente cliente = clienteRepository.findById(id)
                 .orElse(null);
@@ -65,9 +69,14 @@ public class ClienteService {
     }
 
     @Transactional
-    public boolean eliminarPorEmail(String email){
-        long eliminados = clienteRepository.deleteByEmail(email);
-        return eliminados > 0;
+    public boolean eliminarClienteId(Integer id){
+        Cliente eliminar = clienteRepository.findById(id)
+                .orElse(null);
+        if(eliminar == null){
+            return false;
+        }
+        clienteRepository.delete(eliminar);
+        return true;
     }
 
 }
