@@ -36,37 +36,62 @@ public class DireccionService {
     }
 
     // POST → GUARDAR DIRECCION
-    public DireccionDTO guardarDireccion(DireccionDTO dto){
-        Direccion direccion = DireccionMapper.toEntity(dto);
-        Direccion guardada = direccionRepository.save(direccion);
-        return DireccionMapper.toDTO(guardada);
+
+    public DireccionDTO guardarDireccion(
+            DireccionDTO dto){
+        try{
+            Direccion direccion =DireccionMapper.toEntity(dto);
+            Direccion guardada = direccionRepository.save(direccion);
+            return DireccionMapper.toDTO(guardada);
+        }catch (Exception e){
+            throw new RuntimeException(
+                    "Error al guardar dirección");
+        }
     }
 
     // PUT → ACTUALIZAR DIRECCION
-
     public DireccionDTO actualizarDireccion(
             Integer id,
             DireccionDTO dto){
+        try{
+            Direccion direccion =
+                    direccionRepository.findById(id)
+                            .orElse(null);
+            if(direccion == null){
+                return null;
+            }
+            direccion.setCalle(dto.getCalle());
+            direccion.setNumeroCasa(dto.getNumeroCasa());
+            direccion.setComuna(dto.getComuna());
+            direccion.setCiudad(dto.getCiudad());
+            direccion.setCodigoPostal(dto.getCodigoPostal());
+            direccion.setEstado(dto.getEstado());
+            direccion.setFechaRegistro(dto.getFechaRegistro());
 
-        Direccion direccion = direccionRepository.findById(id)
-                .orElse(null);
-        if(direccion == null){
-            return null;
+            Direccion actualizada =
+                    direccionRepository.save(direccion);
+            return DireccionMapper.toDTO(actualizada);
+        }catch (Exception e){
+            throw new RuntimeException(
+                    "Error al actualizar dirección");
         }
-        direccion.setCalle(dto.getCalle());
-        direccion.setNumeroCasa(dto.getNumeroCasa());
-        direccion.setCiudad(dto.getCiudad());
-        direccion.setCodigoPostal(dto.getCodigoPostal());
-        direccion.setEstado(dto.getEstado());
-        direccion.setFechaRegistro(dto.getFechaRegistro());
+    }
 
-        Direccion actualizada =
-                direccionRepository.save(direccion);
-        return DireccionMapper.toDTO(actualizada);
+    // GET → BUSCAR DIRECCIONES POR COMUNA
+    public List<DireccionDTO> buscarPorComuna(
+            String comuna){
+
+        return direccionRepository
+                .findByComunaContainingIgnoreCase(comuna)
+                .stream()
+                .map(DireccionMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     // GET → BUSCAR DIRECCIONES POR CIUDAD
-    public List<DireccionDTO> buscarPorCiudad(String ciudad){
+
+    public List<DireccionDTO> buscarPorCiudad(
+            String ciudad){
         return direccionRepository
                 .findByCiudadContainingIgnoreCase(ciudad)
                 .stream()
@@ -75,14 +100,20 @@ public class DireccionService {
     }
 
     // DELETE → ELIMINAR DIRECCION POR ID
+
     @Transactional
     public boolean eliminarDireccion(Integer id){
-        Direccion direccion = direccionRepository.findById(id)
-                .orElse(null);
-        if(direccion == null){
+        try{
+            Direccion direccion =
+                    direccionRepository.findById(id)
+                            .orElse(null);
+            if(direccion == null){
+                return false;
+            }
+            direccionRepository.delete(direccion);
+            return true;
+        }catch (Exception e){
             return false;
         }
-        direccionRepository.delete(direccion);
-        return true;
     }
 }

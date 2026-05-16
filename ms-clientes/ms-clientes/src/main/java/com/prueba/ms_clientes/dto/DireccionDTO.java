@@ -27,6 +27,10 @@ public class DireccionDTO {
 
     @NotBlank(message = "La comuna es obligatoria")
     @Size(min = 2, max = 100, message = "La comuna debe tener entre 2 y 100 caracteres")
+    private String comuna;
+
+    @NotBlank(message = "La ciudad es obligatoria")
+    @Size(min = 2, max = 100, message = "La ciudad debe tener entre 2 y 100 caracteres")
     private String ciudad;
 
     @NotNull(message = "El código postal es obligatorio")

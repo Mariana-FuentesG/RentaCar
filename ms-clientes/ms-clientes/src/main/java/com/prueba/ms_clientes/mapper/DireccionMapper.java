@@ -7,12 +7,12 @@ import com.prueba.ms_clientes.model.Direccion;
 public class DireccionMapper {
 
     // ENTITY → DTO
-
     public static DireccionDTO toDTO(Direccion direccion){
         return new DireccionDTO(
                 direccion.getId(),
                 direccion.getCalle(),
                 direccion.getNumeroCasa(),
+                direccion.getComuna(),
                 direccion.getCiudad(),
                 direccion.getCodigoPostal(),
                 direccion.getEstado(),
@@ -31,6 +31,7 @@ public class DireccionMapper {
         direccion.setId(dto.getId());
         direccion.setCalle(dto.getCalle());
         direccion.setNumeroCasa(dto.getNumeroCasa());
+        direccion.setComuna(dto.getComuna());
         direccion.setCiudad(dto.getCiudad());
         direccion.setCodigoPostal(dto.getCodigoPostal());
         direccion.setEstado(dto.getEstado());

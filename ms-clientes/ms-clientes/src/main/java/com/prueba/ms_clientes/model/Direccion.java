@@ -26,6 +26,9 @@ public class Direccion {
     private Integer numeroCasa;
 
     @Column(nullable = false)
+    private String comuna;
+
+    @Column(nullable = false)
     private String ciudad;
 
     @Column(nullable = false)
