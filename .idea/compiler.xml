@@ -10,14 +10,16 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
         </processorPath>
         <module name="ms-reservas" />
-        <module name="ms-sucursales" />
         <module name="ms-reportes" />
+        <module name="ms-sucursales" />
         <module name="ms-clientes" />
-        <module name="ms-empleados" />
-        <module name="ms-pagos" />
-        <module name="ms-vehiculos" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ms-empleados" target="25" />
+      <module name="ms-pagos" target="25" />
+      <module name="ms-vehiculos" target="25" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
