@@ -74,14 +74,12 @@ public class ClienteService {
     @Transactional
     public boolean eliminarClienteId(Integer id){
         try{
-            Cliente eliminar =
-                    clienteRepository.findById(id)
+            Cliente eliminar = clienteRepository.findById(id)
                             .orElse(null);
             if(eliminar == null){
                 return false;
             }
-            clienteRepository.delete(eliminar);
-            return true;
+            clienteRepository.delete(eliminar);return true;
         }catch (Exception e){
             return false;
         }

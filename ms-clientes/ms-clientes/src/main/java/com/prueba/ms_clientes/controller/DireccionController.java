@@ -20,42 +20,33 @@ public class DireccionController {
     @Autowired
     DireccionService direccionService;
 
-    // ============================================
     // GET → LISTAR TODAS LAS DIRECCIONES
-    // ============================================
     @GetMapping
     public ResponseEntity<List<DireccionDTO>> obtenerDirecciones(){
-
         return ResponseEntity.ok(
                 direccionService.obtenerDirecciones()
         );
     }
-    // GET → OBTENER DIRECCION POR ID
 
+    // GET → OBTENER DIRECCION POR ID
     @GetMapping("/{id}")
     public ResponseEntity<DireccionDTO> obtenerDireccionPorId(
             @PathVariable Integer id){
-
         DireccionDTO direccion =
                 direccionService.obtenerDireccionPorId(id);
-
         if(direccion == null){
-
             return ResponseEntity.notFound().build();
         }
-
         return ResponseEntity.ok(direccion);
     }
 
-    // ============================================
     // GET → BUSCAR DIRECCIONES POR COMUNA
-    // ============================================
+
     @GetMapping("/comuna/{}")
     public ResponseEntity<List<DireccionDTO>> buscarPorComuna(
-            @PathVariable String ciudad){
-
+            @PathVariable String comuna){
         List<DireccionDTO> direcciones =
-                direccionService.buscarPorCiudad(ciudad);
+                direccionService.buscarPorComuna(comuna);
         if(direcciones.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -89,15 +80,11 @@ public class DireccionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(
             @PathVariable Integer id){
-
         boolean eliminado =
                 direccionService.eliminarDireccion(id);
-
         if(!eliminado){
-
             return ResponseEntity.notFound().build();
         }
-
         return ResponseEntity.noContent().build();
     }
 }
