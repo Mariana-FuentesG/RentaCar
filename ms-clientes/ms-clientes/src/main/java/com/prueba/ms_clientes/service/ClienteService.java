@@ -48,35 +48,43 @@ public class ClienteService {
         return ClienteMapper.toDTO(cliente);
     }
 
-
-    // GET actualizar cliente
+    // PUT actualizar cliente
     public ClienteDTO actualizarCliente(Integer id, ClienteDTO dto){
-        Cliente cliente = clienteRepository.findById(id)
-                .orElse(null);
-        if(cliente == null){
-            return null;
-        }
-        cliente.setId(dto.getId());
-        cliente.setNombreCompleto(dto.getNombreCompleto());
-        cliente.setRut(dto.getRut());
-        cliente.setEmail(dto.getEmail());
-        cliente.setTelefono(dto.getTelefono());
-        cliente.setActivo(dto.getActivo());
-        cliente.setFechaRegistro(dto.getFechaRegistro());
+        try {
+            Cliente cliente = clienteRepository.findById(id)
+                    .orElse(null);
+            if (cliente == null) {
+                return null;
+            }
+            cliente.setNombreCompleto(dto.getNombreCompleto());
+            cliente.setRut(dto.getRut());
+            cliente.setEmail(dto.getEmail());
+            cliente.setTelefono(dto.getTelefono());
+            cliente.setActivo(dto.getActivo());
+            cliente.setFechaRegistro(dto.getFechaRegistro());
 
-        Cliente actualizado = clienteRepository.save(cliente);
-        return ClienteMapper.toDTO(actualizado);
+            Cliente actualizado = clienteRepository.save(cliente);
+            return ClienteMapper.toDTO(actualizado);
+        }
+        catch (Exception e){
+            throw new RuntimeException("Error al actualizar cliente");
+        }
     }
 
     @Transactional
     public boolean eliminarClienteId(Integer id){
-        Cliente eliminar = clienteRepository.findById(id)
-                .orElse(null);
-        if(eliminar == null){
+        try{
+            Cliente eliminar =
+                    clienteRepository.findById(id)
+                            .orElse(null);
+            if(eliminar == null){
+                return false;
+            }
+            clienteRepository.delete(eliminar);
+            return true;
+        }catch (Exception e){
             return false;
         }
-        clienteRepository.delete(eliminar);
-        return true;
     }
 
 }
