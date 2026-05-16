@@ -31,7 +31,7 @@ public class Reserva {
     private Integer cantidadDias;
 
     @Column(nullable = false)
-    private boolean pagada;
+    private Boolean pagada;
 
     @Column(nullable = false)
     private LocalDate fechaInicio;

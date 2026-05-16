@@ -9,7 +9,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 public class MsReservasApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MsReservasApplication.class, args);
+        SpringApplication.run(MsReservasApplication.class,
+                args);
 	}
 
 }

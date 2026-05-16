@@ -12,7 +12,7 @@ public class ReservaMapper {
                 reserva.getVehiculoId(),
                 reserva.getMontoTotal(),
                 reserva.getCantidadDias(),
-                reserva.isPagada(),
+                reserva.getPagada(),
                 reserva.getFechaInicio(),
                 reserva.getFechaTermino(),
                 reserva.getFechaReserva(),

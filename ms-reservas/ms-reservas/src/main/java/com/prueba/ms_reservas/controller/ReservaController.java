@@ -1,6 +1,5 @@
 package com.prueba.ms_reservas.controller;
 
-
 import com.prueba.ms_reservas.dto.ReservaDTO;
 import com.prueba.ms_reservas.service.ReservaService;
 import jakarta.validation.Valid;
@@ -9,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -25,7 +25,7 @@ public class ReservaController {
         return ResponseEntity.ok(reservas);
     }
 
-    // GET → BUSCAR RESERVA POR ID
+    // GET → OBTENER RESERVA POR ID
     @GetMapping("/{id}")
     public ResponseEntity<ReservaDTO> obtenerReservaPorId(
             @PathVariable Integer id){
@@ -51,6 +51,22 @@ public class ReservaController {
         ReservaDTO reservaActualizada = reservaService.actualizarReserva(id, dto);
         if(reservaActualizada == null){return ResponseEntity.notFound().build();
         }return ResponseEntity.ok(reservaActualizada);
+    }
+
+    // GET → BUSCAR RESERVAS DESDE FECHA
+
+    @GetMapping("/fecha/{fecha}")
+    public ResponseEntity<List<ReservaDTO>>
+    buscarReservasDesdeFecha(@PathVariable LocalDate fecha){
+        List<ReservaDTO> reservas = reservaService
+                        .buscarReservasDesdeFecha(fecha);
+        if(reservas.isEmpty()){
+            return ResponseEntity
+                    .notFound()
+                    .build();
+        }
+        return ResponseEntity
+                .ok(reservas);
     }
 
     // DELETE → ELIMINAR RESERVA

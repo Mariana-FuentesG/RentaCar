@@ -31,7 +31,7 @@ public class ReservaDTO {
     private Integer cantidadDias;
 
     @NotNull(message = "El estado de pago es obligatorio")
-    private boolean pagada;
+    private Boolean pagada;
 
     @NotNull(message = "La fecha de inicio es obligatoria")
     @FutureOrPresent
