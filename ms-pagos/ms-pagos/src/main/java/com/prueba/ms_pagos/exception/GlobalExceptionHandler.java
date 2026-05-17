@@ -1,6 +1,5 @@
 package com.prueba.ms_pagos.exception;
 
-import com.prueba.ms_clientes.exception.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -41,3 +40,4 @@ public class GlobalExceptionHandler {
     }
 
 }
+

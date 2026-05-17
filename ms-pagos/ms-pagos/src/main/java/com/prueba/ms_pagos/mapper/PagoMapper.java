@@ -7,7 +7,6 @@ public class PagoMapper {
 
     // ENTITY → DTO
     public static PagoDTO toDTO(Pago pago){
-
         return new PagoDTO(
 
                 pago.getId(),

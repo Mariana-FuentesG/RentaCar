@@ -3,8 +3,7 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
-      <profile name="Annotation profile for ms-clientes" enabled="true">
-      <profile name="Annotation profile for ms-sucursales" enabled="true">
+      <profile name="Annotation profile for ms-reservas" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -18,17 +17,6 @@
         <module name="ms-empleados" />
         <module name="ms-pagos" />
         <module name="ms-vehiculos" />
-        <module name="ms-sucursales" />
-      </profile>
-      <profile name="Annotation profile for ms-reservas" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
-        </processorPath>
-        <module name="ms-reservas" />
       </profile>
     </annotationProcessing>
   </component>

@@ -71,7 +71,7 @@ public class ReservaService {
             }
             reserva.setClienteId(dto.getClienteId());
             reserva.setVehiculoId(dto.getVehiculoId());
-            reserva.setMontoTotal(dto.getMontoTotal());
+            reserva.setMontoReserva(dto.getMontoReserva());
             reserva.setCantidadDias(dto.getCantidadDias());
             reserva.setPagada(dto.getPagada());
             reserva.setFechaInicio(dto.getFechaInicio());
