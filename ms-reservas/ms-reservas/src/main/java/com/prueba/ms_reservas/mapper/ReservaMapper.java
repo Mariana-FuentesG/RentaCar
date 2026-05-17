@@ -10,7 +10,7 @@ public class ReservaMapper {
                 reserva.getId(),
                 reserva.getClienteId(),
                 reserva.getVehiculoId(),
-                reserva.getMontoTotal(),
+                reserva.getMontoReserva(),
                 reserva.getCantidadDias(),
                 reserva.getPagada(),
                 reserva.getFechaInicio(),
@@ -28,7 +28,7 @@ public class ReservaMapper {
         reserva.setId(dto.getId());
         reserva.setClienteId(dto.getClienteId());
         reserva.setVehiculoId(dto.getVehiculoId());
-        reserva.setMontoTotal(dto.getMontoTotal());
+        reserva.setMontoReserva(dto.getMontoReserva());
         reserva.setCantidadDias(dto.getCantidadDias());
         reserva.setPagada(dto.getPagada());
         reserva.setFechaInicio(dto.getFechaInicio());

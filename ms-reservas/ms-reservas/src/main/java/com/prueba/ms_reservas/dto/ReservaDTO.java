@@ -24,7 +24,7 @@ public class ReservaDTO {
     @NotNull(message = "El monto total es obligatorio")
     @DecimalMin(value = "0.0",
             message = "El monto debe ser mayor o igual a 0")
-    private Double montoTotal;
+    private Double montoReserva;
 
     @NotNull(message = "La cantidad de días es obligatoria")
     @Positive(message = "La cantidad de días debe ser positiva")

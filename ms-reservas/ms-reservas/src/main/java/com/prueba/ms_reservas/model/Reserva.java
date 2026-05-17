@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "reservas")
+@Table(name = "RESERVAS")
 public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class Reserva {
     private Integer vehiculoId;
 
     @Column(nullable = false)
-    private Double montoTotal;
+    private Double montoReserva;
 
     @Column(nullable = false)
     private Integer cantidadDias;
