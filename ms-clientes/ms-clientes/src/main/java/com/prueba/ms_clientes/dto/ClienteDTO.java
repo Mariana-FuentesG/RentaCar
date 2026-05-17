@@ -26,7 +26,8 @@ public class ClienteDTO {
     private String email;
 
     @NotBlank(message = "El teléfono es obligatorio")
-    @Size(min =2, max = 10, message = "El telefono debe tener entre 2 y 10 caracteres")
+    @Size(min =2, max = 10,
+            message = "El telefono debe tener entre 2 y 10 caracteres")
     private String telefono;
 
     @NotNull(message = "El estado es obligatorio")

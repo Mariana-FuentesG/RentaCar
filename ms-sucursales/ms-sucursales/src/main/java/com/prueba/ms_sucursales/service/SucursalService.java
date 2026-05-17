@@ -31,7 +31,8 @@ public class SucursalService {
     public SucursalDTO obtenerSucursalPorId(Integer id){
         Sucursal sucursal = sucursalRepository.findById(id)
                         .orElse(null);
-        if(sucursal == null){return null;
+        if(sucursal == null){
+            return null;
         }
         return SucursalMapper.toDTO(sucursal);
     }
@@ -40,9 +41,12 @@ public class SucursalService {
     public SucursalDTO guardarSucursal(SucursalDTO dto){
         Region region = regionRepository.findById(dto.getRegionId())
                         .orElse(null);
-        if(region == null){return null;
+
+        if(region == null){
+            return null;
         }
         Sucursal sucursal = SucursalMapper.toEntity(dto);
+
         sucursal.setRegion(region);
         Sucursal guardada = sucursalRepository.save(sucursal);
         return SucursalMapper.toDTO(guardada);
@@ -50,39 +54,46 @@ public class SucursalService {
 
     // PUT → ACTUALIZAR SUCURSAL
     public SucursalDTO actualizarSucursal(Integer id, SucursalDTO dto){
-        Sucursal sucursal = sucursalRepository.findById(id)
-                        .orElse(null);
-        if(sucursal == null){return null;
+        try {Sucursal sucursal = sucursalRepository.findById(id)
+                    .orElse(null);
+            if (sucursal == null) {
+                return null;
+            }
+            Region region = regionRepository.findById(dto.getRegionId())
+                    .orElse(null);
+            if (region == null) {return null;
+            }
+            // ACTUALIZAR CAMPOS INDIVIDUALMENTE
+            sucursal.setNombre(dto.getNombre());
+            sucursal.setDireccion(dto.getDireccion());
+            sucursal.setTelefono(dto.getTelefono());
+            sucursal.setCiudad(dto.getCiudad());
+            sucursal.setActiva(dto.getActiva());
+            sucursal.setCantidadVehiculos(dto.getCantidadVehiculos());
+
+            sucursal.setRegion(region);
+            Sucursal actualizada = sucursalRepository.save(sucursal);
+
+            return SucursalMapper.toDTO(actualizada);
+        }catch(Exception e){
+            return null;
         }
-        Region region = regionRepository.findById(dto.getRegionId())
-                .orElse(null);
-        if(region == null){return null;
-        }
-        sucursal.setNombre(dto.getNombre());
-        sucursal.setDireccion(dto.getDireccion());
-        sucursal.setTelefono(dto.getTelefono());
-        sucursal.setCiudad(dto.getCiudad());
-        sucursal.setActiva(dto.getActiva());
-        sucursal.setCantidadVehiculos(dto.getCantidadVehiculos());
-        sucursal.setRegion(region);
-        Sucursal actualizada = sucursalRepository.save(sucursal);
-        return SucursalMapper.toDTO(actualizada);
     }
 
     // DELETE → ELIMINAR SUCURSAL
     public boolean eliminarSucursal(Integer id){
         if(!sucursalRepository.existsById(id)){
             return false;
-        }sucursalRepository.deleteById(id);
+        }
+        sucursalRepository.deleteById(id);
         return true;
     }
 
-    // QUERY METHOD
-    public List<SucursalDTO> obtenerSucursalesPorCiudad(String ciudad){
-        List<Sucursal> sucursales = sucursalRepository
-                .findByCiudadContainingIgnoreCase(ciudad);
-        return sucursales.stream()
+    // QUERY METHOD → LISTAR SUCURSALES OPERATIVAS
+    public List<SucursalDTO> obtenerSucursalesOperativas(){
+        return sucursalRepository.obtenerSucursalesOperativas()
+                .stream()
                 .map(SucursalMapper::toDTO)
-                .toList();
+                .collect(Collectors.toList());
     }
 }

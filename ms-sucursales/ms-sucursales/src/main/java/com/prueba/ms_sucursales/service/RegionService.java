@@ -62,12 +62,5 @@ public class RegionService {
         return true;
     }
 
-    // QUERY METHOD
-    public List<RegionDTO> obtenerRegionesPorNombre(String nombre){
-        List<Region> regiones = regionRepository
-                .findByNombreContainingIgnoreCase(nombre);
-        return regiones.stream()
-                .map(RegionMapper::toDTO)
-                .toList();
-    }
+
 }

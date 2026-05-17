@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "SUCURSAL")
+@Table(name = "SUCURSALES")
 public class Sucursal {
 
     @Id
