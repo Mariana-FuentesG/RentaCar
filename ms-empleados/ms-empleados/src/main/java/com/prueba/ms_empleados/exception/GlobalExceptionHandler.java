@@ -1,4 +1,4 @@
-package com.prueba.ms_sucursales.exception;
+package com.prueba.ms_empleados.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -40,3 +40,4 @@ public class GlobalExceptionHandler {
     }
 
 }
+
