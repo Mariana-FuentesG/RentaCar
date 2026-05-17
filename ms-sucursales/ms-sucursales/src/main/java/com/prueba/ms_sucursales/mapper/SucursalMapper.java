@@ -5,7 +5,7 @@ import com.prueba.ms_sucursales.model.Region;
 import com.prueba.ms_sucursales.model.Sucursal;
 
 public class SucursalMapper {
-    public static SucursalDTO tDTO(Sucursal sucursal) {
+    public static SucursalDTO toDTO(Sucursal sucursal) {
         return new SucursalDTO(
                 sucursal.getId(),
                 sucursal.getNombre(),
