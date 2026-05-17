@@ -47,7 +47,7 @@ public class PagoDTO {
     // CANTIDAD DE CUOTAS
     @NotNull(message = "La cantidad de cuotas es obligatoria")
     @Positive(message = "Las cuotas deben ser mayores a 0")
-    private Integer cantcuotas;
+    private Integer cantCuotas;
 
     // DATOS DE RESERVA RELACIONADA
     private Double montoReserva;
