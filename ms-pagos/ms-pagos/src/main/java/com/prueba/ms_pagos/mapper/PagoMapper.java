@@ -25,9 +25,7 @@ public class PagoMapper {
 
     // DTO → ENTITY
     public static Pago toEntity(PagoDTO dto){
-
         Pago pago = new Pago();
-
         pago.setId(dto.getId());
         pago.setReservaId(dto.getReservaId());
         pago.setMonto(dto.getMonto());
