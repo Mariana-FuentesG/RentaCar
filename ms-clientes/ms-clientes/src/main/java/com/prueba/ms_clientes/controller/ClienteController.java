@@ -36,7 +36,7 @@ public class ClienteController {
         if(clientes.isEmpty()){return ResponseEntity.notFound().build();}
         return ResponseEntity.ok(clientes);
     }
-    @PostMapping("/clientes")
+    @PostMapping
     public ResponseEntity<ClienteDTO> guardar(@Valid @RequestBody ClienteDTO dto){
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(clienteService.guardarCliente(dto));

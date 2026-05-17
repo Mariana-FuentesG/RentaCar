@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS pagos(
  pagado BOOLEAN NOT NULL,
  fecha_pago DATE NOT NULL,
  metodo_pago VARCHAR(50) NOT NULL,
- cuotas INT NOT NULL
+ cant_cuotas INT NOT NULL
 );

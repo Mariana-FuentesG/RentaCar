@@ -1,7 +1,7 @@
 INSERT INTO reservas
 (cliente_id,
  vehiculo_id,
- monto_total,
+ monto_reserva,
  cantidad_dias,
  pagada,
  fecha_inicio,
