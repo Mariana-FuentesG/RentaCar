@@ -20,6 +20,15 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining(", "));
         return ResponseEntity.badRequest().body(error); // 400
     }
+    // Recurso no encontrado -> 404
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleResourceNotFound(
+            ResourceNotFoundException ex) {
+
+        return ResponseEntity
+                .status(404)
+                .body(ex.getMessage());
+    }
     // Captura cualquier otro error inesperado -> responde 500
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericError(Exception ex) {

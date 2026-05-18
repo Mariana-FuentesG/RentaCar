@@ -1,7 +1,7 @@
 package com.prueba.ms_reservas.repository;
 
 import com.prueba.ms_reservas.model.Reserva;
-import feign.Param;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

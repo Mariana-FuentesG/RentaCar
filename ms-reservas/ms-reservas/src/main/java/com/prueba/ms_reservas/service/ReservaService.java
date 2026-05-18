@@ -1,8 +1,10 @@
 package com.prueba.ms_reservas.service;
 
 import com.prueba.ms_reservas.client.ClienteClient;
+import com.prueba.ms_reservas.client.VehiculoClient;
 import com.prueba.ms_reservas.dto.ClienteDTO;
 import com.prueba.ms_reservas.dto.ReservaDTO;
+import com.prueba.ms_reservas.dto.VehiculoDTO;
 import com.prueba.ms_reservas.mapper.ReservaMapper;
 import com.prueba.ms_reservas.model.EstadoReserva;
 import com.prueba.ms_reservas.model.Reserva;
@@ -27,6 +29,9 @@ public class ReservaService {
     @Autowired
     ClienteClient clienteClient;
 
+    @Autowired
+    VehiculoClient vehiculoClient;
+
     // GET → LISTAR RESERVAS
     public List<ReservaDTO> obtenerReservas(){
         return reservaRepository.findAll()
@@ -48,25 +53,33 @@ public class ReservaService {
     public ReservaDTO guardarReserva(ReservaDTO dto){
         ClienteDTO cliente = clienteClient.obtenerClientePorId(dto.getClienteId());
         if(cliente == null){return null;}
+        VehiculoDTO vehiculo = vehiculoClient.obtenerVehiculoPorId(dto.getVehiculoId());
+        if(vehiculo == null){return null;}
         Reserva reserva = ReservaMapper.toEntity(dto);
-        EstadoReserva estado =
-                estadoReservaRepository
-                .findById(dto.getEstadoReservaId())
-                .orElse(null);
+        EstadoReserva estado = estadoReservaRepository
+                        .findById(dto.getEstadoReservaId())
+                        .orElse(null);
         if(estado == null){return null;}
         reserva.setEstadoReserva(estado);
-        Reserva guardada =
-                reservaRepository.save(reserva);
+        Reserva guardada = reservaRepository.save(reserva);
         return ReservaMapper.toDTO(guardada);
     }
 
     // PUT → ACTUALIZAR RESERVA
-    public ReservaDTO actualizarReserva(Integer id,
-            ReservaDTO dto){
-        try {
-            Reserva reserva = reservaRepository.findById(id)
+    public ReservaDTO actualizarReserva(Integer id, ReservaDTO dto){
+
+        try {Reserva reserva = reservaRepository.findById(id)
                             .orElse(null);
-            if(reserva == null){
+            if(reserva == null){return null;
+            }
+            ClienteDTO cliente = clienteClient.obtenerClientePorId(
+                            dto.getClienteId());
+            if(cliente == null){
+                return null;
+            }
+            VehiculoDTO vehiculo = vehiculoClient.obtenerVehiculoPorId(
+                            dto.getVehiculoId());
+            if(vehiculo == null){
                 return null;
             }
             reserva.setClienteId(dto.getClienteId());
@@ -87,8 +100,7 @@ public class ReservaService {
             Reserva actualizada = reservaRepository.save(reserva);
             return ReservaMapper.toDTO(actualizada);
         }catch (Exception e){
-            throw new RuntimeException(
-                    "Error al actualizar reserva");
+            throw new RuntimeException("❌ Error al actualizar reserva");
         }
     }
     // JPQL → BUSCAR RESERVAS DESDE FECHA
