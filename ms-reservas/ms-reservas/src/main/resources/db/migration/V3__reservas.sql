@@ -12,15 +12,13 @@ INSERT INTO reservas
 VALUES
 
     (1, 1, 150000, 3, true,
-     CURRENT_DATE,
-     CURRENT_DATE + 3,
+     CURRENT_DATE,DATE_ADD(CURRENT_DATE,INTERVAL 3 DAY),
      CURRENT_DATE,
      'Reserva inicial',
      3),
 
     (2, 2, 300000, 5, false,
-     CURRENT_DATE,
-     CURRENT_DATE + 5,
+     CURRENT_DATE,DATE_ADD(CURRENT_DATE,INTERVAL 5 DAY),
      CURRENT_DATE,
      'Reserva pendiente',
      1);
