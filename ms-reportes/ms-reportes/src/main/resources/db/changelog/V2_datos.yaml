@@ -1,92 +1,73 @@
 databaseChangeLog:
   - changeSet:
       id: 2
-      author: Mariana-FuentesG
-
+      author: mariana
       changes:
-
+        # REPORTE 1
         - insert:
-            tableName: Reportes
-
+            tableName: REPORTES
             columns:
               - column:
                   name: titulo
                   value: "Reporte Mensual"
-
               - column:
-                  name: descripción
-                  value: "Reporte Mensual de Reservas y Pagos"
-
+                  name: descripcion
+                  value: "Reporte mensual de reservas y pagos"
               - column:
                   name: total_reservas
                   valueNumeric: 25
-
               - column:
                   name: total_ingresos
                   valueNumeric: 5500000
-
               - column:
                   name: activo
                   valueBoolean: true
-
               - column:
-                  name: fecha_generación
-                  valueDate: "2026-05-01"
+                  name: fecha_generacion
+                  valueDate: "2025-05-01"
 
+        # REPORTE 2
         - insert:
-            tableName: Reportes
-
+            tableName: REPORTES
             columns:
               - column:
                   name: titulo
-                  value: "Reporte semanal"
-
+                  value: "Reporte Semanal"
               - column:
-                  name: descripción
-                  value: "Reporte semanal de Ingresos"
-
+                  name: descripcion
+                  value: "Reporte semanal de ingresos"
               - column:
                   name: total_reservas
                   valueNumeric: 10
-
               - column:
                   name: total_ingresos
-                  valueNumeric: 200.000
-                  
-              - column: 
+                  valueNumeric: 2200000
+              - column:
                   name: activo
                   valueBoolean: true
-
-                  
-              - column: 
-                  name: fecha_generación
+              - column:
+                  name: fecha_generacion
                   valueDate: "2025-05-10"
 
+        # REPORTE 3
         - insert:
-            tableName: Reportes
-
+            tableName: REPORTES
             columns:
               - column:
                   name: titulo
                   value: "Reporte Anual"
-
               - column:
-                  name: descripción
-                  value: "Resumen anual de Reservas"
-
+                  name: descripcion
+                  value: "Resumen anual de reservas"
               - column:
                   name: total_reservas
                   valueNumeric: 120
-
               - column:
                   name: total_ingresos
                   valueNumeric: 25000000
-
               - column:
                   name: activo
                   valueBoolean: false
-
               - column:
-                  name: fecha_generación
+                  name: fecha_generacion
                   valueDate: "2025-01-01"
-

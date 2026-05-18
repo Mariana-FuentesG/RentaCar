@@ -5,6 +5,7 @@ import com.prueba.ms_reportes.dto.ReporteDTO;
 import com.prueba.ms_reportes.dto.ReservaDTO;
 import com.prueba.ms_reportes.service.ReporteService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping ("/api/v1/reportes")
+@RequiredArgsConstructor
 public class ReporteController {
     @Autowired
     ReporteService reporteService;

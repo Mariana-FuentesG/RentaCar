@@ -1,6 +1,0 @@
-databaseChangeLog:
-  - include:
-      file: changelog/V1__init.yaml
-
-  - include:
-      file: changelog/V2__datos.yaml
