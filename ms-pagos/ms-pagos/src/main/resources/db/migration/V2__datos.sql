@@ -1,4 +1,4 @@
-INSERT INTO pagos
+INSERT INTO PAGOS
 (reserva_id,
  monto,
  pagado,

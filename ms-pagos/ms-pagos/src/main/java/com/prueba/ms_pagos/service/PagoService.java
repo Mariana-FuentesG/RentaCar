@@ -64,6 +64,12 @@ public class PagoService {
                     .orElse(null);
             if(pago == null){return null;
             }
+            // VALIDAR RESERVA CON FEIGN
+            ReservaDTO reserva = reservaClient.obtenerReservaPorId(
+                            dto.getReservaId());
+            if(reserva == null){
+                return null;
+            }
             pago.setReservaId(dto.getReservaId());
             pago.setMonto(dto.getMonto());
             pago.setPagado(dto.getPagado());
@@ -76,7 +82,7 @@ public class PagoService {
         }catch
         (Exception e){
             throw new RuntimeException(
-                    "Error al actualizar pago");
+                    "❌ Error al actualizar pago");
         }
     }
 

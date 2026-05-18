@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "REGION")
+@Table(name = "REGIONES")
 public class Region {
 
     @Id

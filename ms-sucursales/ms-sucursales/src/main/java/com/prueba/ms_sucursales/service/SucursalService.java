@@ -89,7 +89,7 @@ public class SucursalService {
         return true;
     }
 
-    // QUERY METHOD → LISTAR SUCURSALES OPERATIVAS
+    //QUERY NATIVE → LISTAR SUCURSALES OPERATIVAS
     public List<SucursalDTO> obtenerSucursalesOperativas(){
         return sucursalRepository.obtenerSucursalesOperativas()
                 .stream()
