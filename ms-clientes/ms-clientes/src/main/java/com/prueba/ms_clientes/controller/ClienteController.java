@@ -22,6 +22,7 @@ public class ClienteController {
     public List<ClienteDTO> listarClientes() {
         return clienteService.obtenerClientes();
     }
+
     // GET → OBTENER CLIENTE POR ID
     @GetMapping("{id}")
     public ResponseEntity<ClienteDTO> obtenerClientePorId(@PathVariable Integer id){
@@ -36,22 +37,33 @@ public class ClienteController {
         if(clientes.isEmpty()){return ResponseEntity.notFound().build();}
         return ResponseEntity.ok(clientes);
     }
+    // GET → LISTAR CLIENTES ACTIVOS
+    @GetMapping("/activos")
+    public ResponseEntity<List<ClienteDTO>> obtenerClientesActivos() {
+        List<ClienteDTO> clientes = clienteService.obtenerClientesActivos();
+        if (clientes.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(clientes);
+    }
+
     @PostMapping
     public ResponseEntity<ClienteDTO> guardar(@Valid @RequestBody ClienteDTO dto){
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(clienteService.guardarCliente(dto));
     }
     //PUT → ACTUALIZAR CLIENTE
-    @PutMapping("/clientes/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ClienteDTO> actualizar(@PathVariable Integer id,
             @Valid @RequestBody ClienteDTO dto){
         dto.setId(id);
         return ResponseEntity.ok(clienteService.actualizarCliente(id, dto));
     }
     //DELETE → ELIMINAR CLIENTE
-    @DeleteMapping("/clientes/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Integer id){
         clienteService.eliminarClienteId(id);
         return ResponseEntity.noContent().build();
     }
+
 }

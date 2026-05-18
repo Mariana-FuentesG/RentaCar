@@ -41,8 +41,7 @@ public class DireccionController {
     }
 
     // GET → BUSCAR DIRECCIONES POR COMUNA
-
-    @GetMapping("/comuna/{}")
+    @GetMapping("/comuna/{comuna}")
     public ResponseEntity<List<DireccionDTO>> buscarPorComuna(
             @PathVariable String comuna){
         List<DireccionDTO> direcciones =

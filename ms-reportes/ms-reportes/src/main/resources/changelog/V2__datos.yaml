@@ -1,0 +1,92 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: Mariana-FuentesG
+
+      changes:
+
+        - insert:
+            tableName: Reportes
+
+            columns:
+              - column:
+                  name: titulo
+                  value: "Reporte Mensual"
+
+              - column:
+                  name: descripción
+                  value: "Reporte Mensual de Reservas y Pagos"
+
+              - column:
+                  name: total_reservas
+                  valueNumeric: 25
+
+              - column:
+                  name: total_ingresos
+                  valueNumeric: 5500000
+
+              - column:
+                  name: activo
+                  valueBoolean: true
+
+              - column:
+                  name: fecha_generación
+                  valueDate: "2026-05-01"
+
+        - insert:
+            tableName: Reportes
+
+            columns:
+              - column:
+                  name: titulo
+                  value: "Reporte semanal"
+
+              - column:
+                  name: descripción
+                  value: "Reporte semanal de Ingresos"
+
+              - column:
+                  name: total_reservas
+                  valueNumeric: 10
+
+              - column:
+                  name: total_ingresos
+                  valueNumeric: 200.000
+                  
+              - column: 
+                  name: activo
+                  valueBoolean: true
+
+                  
+              - column: 
+                  name: fecha_generación
+                  valueDate: "2025-05-10"
+
+        - insert:
+            tableName: Reportes
+
+            columns:
+              - column:
+                  name: titulo
+                  value: "Reporte Anual"
+
+              - column:
+                  name: descripción
+                  value: "Resumen anual de Reservas"
+
+              - column:
+                  name: total_reservas
+                  valueNumeric: 120
+
+              - column:
+                  name: total_ingresos
+                  valueNumeric: 25000000
+
+              - column:
+                  name: activo
+                  valueBoolean: false
+
+              - column:
+                  name: fecha_generación
+                  valueDate: "2025-01-01"
+

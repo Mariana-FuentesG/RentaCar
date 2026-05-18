@@ -1,0 +1,52 @@
+ databaseChangeLog:
+   - changeSet:
+       id: 1
+       author: Mariana-FuentesG
+
+       changes:
+         - createTable:
+             tableName: REPORTES
+             columns:
+               - column:
+                   name: id
+                   type: INT
+                   autoIncrement: true
+                   constraints:
+                     primaryKey: true
+                     nullable: false
+
+               - column:
+                   name: titulo
+                   type: VARCHAR(150)
+                   constraints:
+                     nullable: false
+
+               - column:
+                   name: descripcion
+                   type: VARCHAR(300)
+                   constraints:
+                     nullable: false
+
+               - column:
+                   name: total_reservas
+                   type: INT
+                   constraints:
+                     nullable: false
+
+               - column:
+                   name: total_ingresos
+                   type: DOUBLE
+                   constraints:
+                     nullable: false
+
+               - column:
+                   name: activo
+                   type: BOOLEAN
+                   constraints:
+                     nullable: false
+
+               - column:
+                   name: fecha_generacion
+                   type: DATE
+                   constraints:
+                     nullable: false
