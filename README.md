@@ -10,12 +10,6 @@ Cada microservicio posee responsabilidades específicas y una base de datos inde
 
 ---
 
-# 👩‍💻 Integrantes
-
-* Mariana Alejandra Fuentes González
-
----
-
 # 🛠️ Tecnologías Utilizadas
 
 * Java 17

@@ -62,6 +62,13 @@ public class ReporteController {
         }
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/activos")
+    public ResponseEntity<List<ReporteDTO>> obtenerReportesActivos(){
+        return ResponseEntity.ok(
+                reporteService.obtenerReportesActivos());
+    }
+
     // FEIGN → OBTENER RESERVAS
     @GetMapping("/reservas")
     public ResponseEntity<List<ReservaDTO>> obtenerReservas(){

@@ -5,6 +5,7 @@ import com.prueba.ms_reportes.client.ReservaClient;
 import com.prueba.ms_reportes.dto.PagoDTO;
 import com.prueba.ms_reportes.dto.ReporteDTO;
 import com.prueba.ms_reportes.dto.ReservaDTO;
+import com.prueba.ms_reportes.exception.ResourceNotFoundException;
 import com.prueba.ms_reportes.mapper.ReporteMapper;
 import com.prueba.ms_reportes.model.Reporte;
 import com.prueba.ms_reportes.repository.ReporteRepository;
@@ -34,27 +35,25 @@ public class ReporteService {
     // GET → OBTENER REPORTE POR ID
     public ReporteDTO obtenerReportePorId(Integer id){
         Reporte reporte = reporteRepository.findById(id)
-                .orElse(null);
-        if(reporte == null){return null;
-        }
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Reporte no encontrado con id: " + id));
         return ReporteMapper.toDTO(reporte);
     }
 
     // POST → GUARDAR REPORTE
     public ReporteDTO guardarReporte(ReporteDTO dto){
-        try{Reporte reporte = ReporteMapper.toEntity(dto);
-            Reporte guardado = reporteRepository.save(reporte);
-            return ReporteMapper.toDTO(guardado);
-        }catch (Exception e){
-            return null;
-        }
+        Reporte reporte = ReporteMapper.toEntity(dto);
+        Reporte guardado = reporteRepository.save(reporte);
+        return ReporteMapper.toDTO(guardado);
     }
 
     // PUT → ACTUALIZAR REPORTE
     public ReporteDTO actualizarReporte(Integer id, ReporteDTO dto){
         try{Reporte reporte = reporteRepository.findById(id)
-                .orElse(null);
-            if(reporte == null){return null;}
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Reporte no encontrado con id: " + id));
 
             // ACTUALIZAR CAMPOS INDIVIDUALMENTE
             reporte.setTitulo(dto.getTitulo());
@@ -66,8 +65,9 @@ public class ReporteService {
 
             Reporte actualizado = reporteRepository.save(reporte);
             return ReporteMapper.toDTO(actualizado);
-        }catch (Exception e){
-            return null;
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    "Error al actualizar reporte");
         }
     }
 
@@ -80,6 +80,13 @@ public class ReporteService {
             return true;
         }catch (Exception e){
             return false;}
+    }
+
+    public List<ReporteDTO> obtenerReportesActivos(){
+        return reporteRepository.findByActivoTrue()
+                .stream()
+                .map(ReporteMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     // CONSOLIDAR RESERVAS
