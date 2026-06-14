@@ -21,6 +21,15 @@ public class Reserva {
     @Column(nullable = false)
     private Integer clienteId;
 
+    @Transient
+    private String nombreCliente;
+
+    @Transient
+    private String marcaVehiculo;
+
+    @Transient
+    private String modeloVehiculo;
+
     @Column(nullable = false)
     private Integer vehiculoId;
 
@@ -46,6 +55,8 @@ public class Reserva {
     private String observacion;
 
     @ManyToOne
-    @JoinColumn(name = "estado_reserva_id", nullable = false)
+    @JoinColumn(name = "estado_reserva_id",
+            nullable = false
+    )
     private EstadoReserva estadoReserva;
 }

@@ -17,6 +17,12 @@ public class ReservaDTO {
     @Positive(message = "El id del cliente debe ser positivo")
     private Integer clienteId;
 
+    private String nombreCliente;
+
+    private String marcaVehiculo;
+
+    private String modeloVehiculo;
+
     @NotNull(message = "El vehículo es obligatorio")
     @Positive(message = "El id del vehículo debe ser positivo")
     private Integer vehiculoId;

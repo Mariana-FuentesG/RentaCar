@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,32 +24,63 @@ public class ReservaController {
         return ResponseEntity.ok(reservas);
     }
 
-    // GET → OBTENER RESERVA POR ID
+    // GET → BUSCAR RESERVA POR ID
     @GetMapping("/{id}")
     public ResponseEntity<ReservaDTO> obtenerReservaPorId(
             @PathVariable Integer id){
         ReservaDTO reserva = reservaService.obtenerReservaPorId(id);
         if(reserva == null){
-            return ResponseEntity.notFound().build();
+            return ResponseEntity
+                    .notFound()
+                    .build();
         }
-        return ResponseEntity.ok(reserva);
+        return ResponseEntity.ok(
+                reserva);
     }
 
     // POST → GUARDAR RESERVA
     @PostMapping
-    public ResponseEntity<ReservaDTO> guardarReserva(@Valid @RequestBody ReservaDTO dto){
+    public ResponseEntity<ReservaDTO>
+    guardarReserva(@Valid @RequestBody
+            ReservaDTO dto){
         ReservaDTO reservaGuardada = reservaService.guardarReserva(dto);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(reservaGuardada);
+        if (reservaGuardada == null){
+
+            return ResponseEntity
+                    .notFound()
+                    .build();
+
+        }
+
+        return ResponseEntity
+                .status(
+                        HttpStatus.CREATED)
+                .body(
+                        reservaGuardada);
     }
 
     // PUT → ACTUALIZAR RESERVA
     @PutMapping("/{id}")
-    public ResponseEntity<ReservaDTO> actualizarReserva(@PathVariable Integer id,
-            @Valid @RequestBody ReservaDTO dto){
-        ReservaDTO reservaActualizada = reservaService.actualizarReserva(id, dto);
-        if(reservaActualizada == null){return ResponseEntity.notFound().build();
-        }return ResponseEntity.ok(reservaActualizada);
+    public ResponseEntity<ReservaDTO> actualizarReserva(
+            @PathVariable Integer id,
+            @Valid
+            @RequestBody
+            ReservaDTO dto){
+
+        ReservaDTO reservaActualizada =
+                reservaService
+                        .actualizarReserva(
+                                id, dto);
+
+        if(reservaActualizada == null){
+
+            return ResponseEntity
+                    .notFound()
+                    .build();
+        }
+        return ResponseEntity
+                .ok
+                (reservaActualizada);
     }
 
     // GET → BUSCAR RESERVAS DESDE FECHA

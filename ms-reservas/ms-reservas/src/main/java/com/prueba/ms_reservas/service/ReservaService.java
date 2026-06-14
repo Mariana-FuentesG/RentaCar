@@ -33,53 +33,92 @@ public class ReservaService {
     VehiculoClient vehiculoClient;
 
     // GET → LISTAR RESERVAS
-    public List<ReservaDTO> obtenerReservas(){
+    public List<ReservaDTO> obtenerReservas() {
         return reservaRepository.findAll()
                 .stream()
-                .map(ReservaMapper::toDTO)
+                .map(this::convertirConDetalles)
                 .collect(Collectors.toList());
     }
-    // GET → BUSCAR POR ID
-    public ReservaDTO obtenerReservaPorId(Integer id){
+    // GET → BUSCAR RESERVA POR ID
+    public ReservaDTO obtenerReservaPorId(Integer id) {
         Reserva reserva = reservaRepository.findById(id)
-                .orElse(null);
-        if(reserva == null){
+                        .orElse(null);
+        if (reserva == null) {
             return null;
         }
-        return ReservaMapper.toDTO(reserva);
+        return convertirConDetalles(reserva);
     }
 
     // POST → GUARDAR RESERVA
-    public ReservaDTO guardarReserva(ReservaDTO dto){
-        ClienteDTO cliente = clienteClient.obtenerClientePorId(dto.getClienteId());
-        if(cliente == null){return null;}
-        VehiculoDTO vehiculo = vehiculoClient.obtenerVehiculoPorId(dto.getVehiculoId());
-        if(vehiculo == null){return null;}
+    public ReservaDTO guardarReserva(ReservaDTO dto) {
+        // VALIDAR CLIENTE
+        try {
+            ClienteDTO cliente = clienteClient.obtenerClientePorId(
+                    dto.getClienteId());
+            if (cliente == null) {
+                return null;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    "❌ Servicio clientes no disponible"
+            );
+        }
+        // VALIDAR VEHICULO
+        try {
+            VehiculoDTO vehiculo =
+                    vehiculoClient.obtenerVehiculoPorId(
+                            dto.getVehiculoId());
+            if (vehiculo == null) {
+                return null;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    "❌ Servicio vehículos no disponible"
+            );
+        }
+        //MAPEAR
         Reserva reserva = ReservaMapper.toEntity(dto);
-        EstadoReserva estado = estadoReservaRepository
+        //VALIDAR ESTADO
+        EstadoReserva estado =
+                estadoReservaRepository
                         .findById(dto.getEstadoReservaId())
                         .orElse(null);
-        if(estado == null){return null;}
-        reserva.setEstadoReserva(estado);
-        Reserva guardada = reservaRepository.save(reserva);
-        return ReservaMapper.toDTO(guardada);
+        if (estado == null) {
+            return null;
+        }
+        reserva.setEstadoReserva(
+                estado);
+        try {
+            Reserva guardada =
+                    reservaRepository
+                            .save(reserva);
+            return convertirConDetalles(guardada);
+
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    "❌ Error al guardar reserva: "
+            );
+        }
     }
 
     // PUT → ACTUALIZAR RESERVA
-    public ReservaDTO actualizarReserva(Integer id, ReservaDTO dto){
+    public ReservaDTO actualizarReserva(Integer id, ReservaDTO dto) {
 
-        try {Reserva reserva = reservaRepository.findById(id)
+        try {
+            Reserva reserva = reservaRepository.findById(id)
                             .orElse(null);
-            if(reserva == null){return null;
-            }
-            ClienteDTO cliente = clienteClient.obtenerClientePorId(
-                            dto.getClienteId());
-            if(cliente == null){
+            if (reserva == null) {
                 return null;
             }
+            // VALIDAR CLIENTE
+            ClienteDTO cliente = clienteClient.obtenerClientePorId(dto.getClienteId());
+            if (cliente == null) {
+                return null;
+            }
+            // VALIDAR VEHICULO
             VehiculoDTO vehiculo = vehiculoClient.obtenerVehiculoPorId(
                             dto.getVehiculoId());
-            if(vehiculo == null){
+            if (vehiculo == null) {
                 return null;
             }
             reserva.setClienteId(dto.getClienteId());
@@ -91,38 +130,84 @@ public class ReservaService {
             reserva.setFechaTermino(dto.getFechaTermino());
             reserva.setFechaReserva(dto.getFechaReserva());
             reserva.setObservacion(dto.getObservacion());
+
             EstadoReserva estado = estadoReservaRepository
                             .findById(dto.getEstadoReservaId())
                             .orElse(null);
-            if(estado == null){return null;
+            if (estado == null) {
+                return null;
             }
             reserva.setEstadoReserva(estado);
             Reserva actualizada = reservaRepository.save(reserva);
-            return ReservaMapper.toDTO(actualizada);
-        }catch (Exception e){
+
+            return convertirConDetalles(actualizada);
+
+        } catch (Exception e) {
             throw new RuntimeException("❌ Error al actualizar reserva");
         }
     }
+
     // JPQL → BUSCAR RESERVAS DESDE FECHA
-    public List<ReservaDTO> buscarReservasDesdeFecha(LocalDate fecha){
+    public List<ReservaDTO>
+    buscarReservasDesdeFecha(LocalDate fecha) {
         return reservaRepository
                 .buscarReservasDesdeFecha(fecha)
                 .stream()
-                .map(ReservaMapper::toDTO)
+                .map(this::convertirConDetalles)
                 .collect(Collectors.toList());
     }
 
     // DELETE → ELIMINAR RESERVA
     @Transactional
-    public boolean eliminarReserva(Integer id){
-        try{
+    public boolean eliminarReserva(Integer id) {
+        try {
             Reserva eliminar = reservaRepository.findById(id)
                             .orElse(null);
-            if(eliminar == null){return false;
+            if (eliminar == null) {
+                return false;
             }
-            reservaRepository.delete(eliminar);return true;
-        }catch (Exception e){
+            reservaRepository.delete(eliminar);
+            return true;
+        } catch (Exception e) {
             return false;
         }
+    }
+
+    // FEIGNCLIENT → COMPLETAR DATOS
+    private ReservaDTO convertirConDetalles(Reserva reserva) {
+        ReservaDTO dto =
+                ReservaMapper.toDTO(reserva);
+        // CLIENTE
+        try {
+            ClienteDTO cliente = clienteClient.obtenerClientePorId(
+                            reserva.getClienteId());
+            if (cliente != null) {
+                dto.setNombreCliente(
+                        cliente.getNombreCompleto());
+            }
+        } catch (Exception e) {
+            dto.setNombreCliente(
+                    "❌ Servicio clientes no disponible");
+        }
+
+        // VEHICULO
+        try {
+            VehiculoDTO vehiculo =
+                    vehiculoClient.obtenerVehiculoPorId(
+                            reserva.getVehiculoId());
+            if (vehiculo != null) {
+
+                dto.setMarcaVehiculo(
+                        vehiculo.getMarca());
+                dto.setModeloVehiculo(
+                        vehiculo.getModelo());
+            }
+        } catch (Exception e) {
+            dto.setMarcaVehiculo(
+                    "❌ Marca vehículos no disponible");
+            dto.setModeloVehiculo(
+                    "❌ Modelo vehículos no disponible");
+        }
+        return dto;
     }
 }

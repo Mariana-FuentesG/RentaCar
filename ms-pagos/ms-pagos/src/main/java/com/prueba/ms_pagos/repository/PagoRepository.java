@@ -19,6 +19,6 @@ public interface PagoRepository
             ORDER BY p.fechaPago DESC
             """)
     List<Pago> buscarPagosPorMonto(
-            @Param("mínimo") Double minimo,
-            @Param("máximo") Double maximo);
+            @Param("minimo") Double minimo,
+            @Param("maximo") Double maximo);
 }

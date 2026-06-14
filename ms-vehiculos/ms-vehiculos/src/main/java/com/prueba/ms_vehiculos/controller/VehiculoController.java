@@ -30,7 +30,9 @@ public class VehiculoController {
             @PathVariable Integer id){
         VehiculoDTO vehiculo = vehiculoService.obtenerVehiculoPorId(id);
         if(vehiculo == null){
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.
+                    notFound()
+                    .build();
         }
         return ResponseEntity.ok(vehiculo);
     }
@@ -59,10 +61,16 @@ public class VehiculoController {
     // DELETE → ELIMINAR VEHICULO
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarVehiculo(@PathVariable Integer id){
-        boolean eliminado = vehiculoService.eliminarVehiculo(id);
-        if(!eliminado){return ResponseEntity.notFound().build();
+        boolean eliminado =
+                vehiculoService.eliminarVehiculo(id);
+        if(!eliminado){
+            return ResponseEntity
+                    .notFound()
+                    .build();
         }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 
     // QUERY METHOD OBLIGATORIO
