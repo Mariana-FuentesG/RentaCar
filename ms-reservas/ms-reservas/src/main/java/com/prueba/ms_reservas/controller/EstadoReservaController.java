@@ -2,6 +2,7 @@ package com.prueba.ms_reservas.controller;
 
 import com.prueba.ms_reservas.dto.EstadoReservaDTO;
 import com.prueba.ms_reservas.service.EstadoReservaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/estados-reserva")
+@Tag(name="",description = "")
 public class EstadoReservaController {
 
     @Autowired

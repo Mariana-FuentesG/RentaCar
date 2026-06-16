@@ -6,14 +6,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class OpenApiConfig {
+public class SwaggerConfig {
 
     @Bean
-    public OpenAPI msReservasOpenAPI() {
+    public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("MS Reservas API")
-                        .description("Gestión de reservas de vehículos en RentaCar")
-                        .version("v1.0"));
+                        .title("API MS Reservas")
+                        .version("1.0")
+                        .description("Microservicio encargado de administrar reservas y estados de RentaCar"));
+
     }
 }

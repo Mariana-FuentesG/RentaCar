@@ -14,6 +14,6 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("MS Pagos API")
                         .description("Gestión de pagos asociados a reservas de RentaCar")
-                        .version("v1.0"));
+                        .version("v1"));
     }
 }

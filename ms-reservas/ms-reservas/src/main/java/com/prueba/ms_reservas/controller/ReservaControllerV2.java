@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/reservas")
 @Tag(name = "Reservas",description = "Gestión de reservas de vehículos")
-public class ReservaController {
+public class ReservaControllerV2 {
 
     @Autowired
     ReservaService reservaService;
