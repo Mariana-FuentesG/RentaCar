@@ -3,6 +3,7 @@ package com.prueba.ms_reservas.controller;
 import com.prueba.ms_reservas.dto.ReservaDTO;
 import com.prueba.ms_reservas.service.ReservaService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,13 +27,11 @@ public class ReservaControllerV2 {
 
     // GET → LISTAR TODAS LAS RESERVAS
     @GetMapping
-    @Operation(
-            summary = "Obtener todas las Reservas",
-            description = "Obtiene una lista de todas las reservas existentes")
+    @Operation(summary = "Obtener todas las Reservas", description = "Obtiene una lista de todas las reservas existentes")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operación Exitosa",
-            content = @Content(mediaType = "aplication/json",
-            schema = @Schema(implementation = )))
+                    content = @Content(mediaType = "aplication/json",
+                            schema = @Schema(implementation = ReservaDTO.class)))
     })
     public ResponseEntity<List<ReservaDTO>> obtenerReservas(){
         List<ReservaDTO> reservas = reservaService.obtenerReservas();
@@ -41,10 +40,20 @@ public class ReservaControllerV2 {
 
     // GET → BUSCAR RESERVA POR ID
     @GetMapping("/{id}")
-    @Operation(summary = "Buscar por ID", description = "Se buscan las reservas a través del ID" )
+    @Operation(summary = "Buscar por ID", description = "Se obtiene una reserva utilizando su ID" )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Reserva Encontrada",
+                    content = @Content(mediaType = "aplication/json",
+                            schema = @Schema(implementation = ReservaDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Reserva no Encontrada")
+    })
     public ResponseEntity<ReservaDTO> obtenerReservaPorId(
-            @PathVariable Integer id){
-        ReservaDTO reserva = reservaService.obtenerReservaPorId(id);
+            @Parameter(description = "ID de la reserva", required = true)
+            @PathVariable Integer id
+    ){
+        ReservaDTO reserva =
+                reservaService.
+                        obtenerReservaPorId(id);
         if(reserva == null){
             return ResponseEntity
                     .notFound()
@@ -56,9 +65,22 @@ public class ReservaControllerV2 {
 
     // POST → GUARDAR RESERVA
     @PostMapping
+    @Operation(summary = "Crear Reserva",description = "Permite crear una nueva Reserva")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Reserva Creada",
+                    content = @Content(mediaType = "aplication/json",
+                            schema = @Schema(implementation = ReservaDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Datos Inválidos")
+    })
     public ResponseEntity<ReservaDTO>
-    guardarReserva(@Valid @RequestBody
-            ReservaDTO dto){
+    guardarReserva(@io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Reserva a Crear",
+            required = true
+    )
+            @Valid
+                   @RequestBody
+            ReservaDTO dto
+    ){
         ReservaDTO reservaGuardada = reservaService.guardarReserva(dto);
         if (reservaGuardada == null){
 
