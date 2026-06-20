@@ -244,7 +244,7 @@ public class ReservaController {
     @Operation(summary = "Eliminar reserva",
             description = "Elimina una reserva por su ID")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Reserva eliminada exitosamente"),
+            @ApiResponse(responseCode = "200", description = "Reserva eliminada exitosamente"),
             @ApiResponse(responseCode = "404", description = "Reserva no encontrada")
     })
     public ResponseEntity<Void> eliminarReserva(

@@ -1,4 +1,4 @@
-package com.prueba.ms_reservas;
+package com.prueba.ms_reservas.service;
 
 import com.prueba.ms_reservas.client.ClienteClient;
 import com.prueba.ms_reservas.client.VehiculoClient;
@@ -9,15 +9,14 @@ import com.prueba.ms_reservas.model.EstadoReserva;
 import com.prueba.ms_reservas.model.Reserva;
 import com.prueba.ms_reservas.repository.EstadoReservaRepository;
 import com.prueba.ms_reservas.repository.ReservaRepository;
-import com.prueba.ms_reservas.service.ReservaService;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,23 +26,26 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-class ReservaServiceTest {
+@SpringBootTest
+@ActiveProfiles("test")
+public class ReservaServiceTest {
 
-    @Mock
+    // Inyecta el servicio real de Reserva para ser probado
+    @Autowired
+    private ReservaService reservaService;
+
+    // Crea mocks para simular el comportamiento de los repositorios y clientes Feign
+    @MockitoBean
     private ReservaRepository reservaRepository;
 
-    @Mock
+    @MockitoBean
     private EstadoReservaRepository estadoReservaRepository;
 
-    @Mock
+    @MockitoBean
     private ClienteClient clienteClient;
 
-    @Mock
+    @MockitoBean
     private VehiculoClient vehiculoClient;
-
-    @InjectMocks
-    private ReservaService reservaService;
 
     private final Faker faker = new Faker();
 
@@ -55,7 +57,7 @@ class ReservaServiceTest {
 
     @BeforeEach
     void setUp() {
-        // GIVEN → datos base reutilizables
+        // GIVEN → datos base reutilizables en todos los tests
         estadoReserva = new EstadoReserva();
         estadoReserva.setId(1);
         estadoReserva.setNombreEstado("Pendiente");
@@ -74,7 +76,11 @@ class ReservaServiceTest {
         reserva.setFechaInicio(LocalDate.now());
         reserva.setFechaTermino(LocalDate.now().plusDays(3));
         reserva.setFechaReserva(LocalDate.now());
-        reserva.setObservacion(faker.lorem().sentence());
+        reserva.setObservacion(faker.options().option(
+                "Cliente solicita entrega en sucursal central",
+                "Reserva para viaje de fin de semana",
+                "Cliente prefiere vehículo con GPS incluido"
+        ));
         reserva.setEstadoReserva(estadoReserva);
 
         reservaDTO = new ReservaDTO();
@@ -86,7 +92,10 @@ class ReservaServiceTest {
         reservaDTO.setFechaInicio(LocalDate.now());
         reservaDTO.setFechaTermino(LocalDate.now().plusDays(3));
         reservaDTO.setFechaReserva(LocalDate.now());
-        reservaDTO.setObservacion(faker.lorem().sentence());
+        reservaDTO.setObservacion(faker.options().option(
+                "Cliente solicita entrega en sucursal central",
+                "Requiere vehículo con transmisión automática"
+        ));
         reservaDTO.setEstadoReservaId(1);
 
         clienteDTO = new ClienteDTO();
@@ -95,8 +104,8 @@ class ReservaServiceTest {
 
         vehiculoDTO = new VehiculoDTO();
         vehiculoDTO.setId(1);
-        vehiculoDTO.setMarca(faker.company().name());
-        vehiculoDTO.setModelo(faker.lorem().word());
+        vehiculoDTO.setMarca(faker.options().option("Toyota", "Chevrolet", "Hyundai", "Kia"));
+        vehiculoDTO.setModelo(faker.options().option("Corolla", "Spark", "Tucson", "Sportage"));
     }
 
     // ─────────────────────────────────────────────
@@ -105,7 +114,7 @@ class ReservaServiceTest {
 
     @Test
     @DisplayName("Debe retornar lista de reservas con datos de cliente y vehículo")
-    void obtenerReservas_retornaLista() {
+    public void testObtenerReservas() {
         // GIVEN
         when(reservaRepository.findAll()).thenReturn(List.of(reserva));
         when(clienteClient.obtenerClientePorId(1)).thenReturn(clienteDTO);
@@ -124,7 +133,7 @@ class ReservaServiceTest {
 
     @Test
     @DisplayName("Debe retornar lista vacía si no hay reservas")
-    void obtenerReservas_listaVacia() {
+    public void testObtenerReservasVacio() {
         // GIVEN
         when(reservaRepository.findAll()).thenReturn(List.of());
 
@@ -142,7 +151,7 @@ class ReservaServiceTest {
 
     @Test
     @DisplayName("Debe retornar una reserva existente por ID")
-    void obtenerReservaPorId_existente() {
+    public void testObtenerReservaPorId() {
         // GIVEN
         when(reservaRepository.findById(1)).thenReturn(Optional.of(reserva));
         when(clienteClient.obtenerClientePorId(1)).thenReturn(clienteDTO);
@@ -159,7 +168,7 @@ class ReservaServiceTest {
 
     @Test
     @DisplayName("Debe retornar null si la reserva no existe")
-    void obtenerReservaPorId_noExiste() {
+    public void testObtenerReservaPorIdNoExiste() {
         // GIVEN
         when(reservaRepository.findById(99)).thenReturn(Optional.empty());
 
@@ -176,7 +185,7 @@ class ReservaServiceTest {
 
     @Test
     @DisplayName("Debe guardar una reserva correctamente")
-    void guardarReserva_exitoso() {
+    public void testGuardarReserva() {
         // GIVEN
         when(clienteClient.obtenerClientePorId(1)).thenReturn(clienteDTO);
         when(vehiculoClient.obtenerVehiculoPorId(1)).thenReturn(vehiculoDTO);
@@ -193,7 +202,7 @@ class ReservaServiceTest {
 
     @Test
     @DisplayName("Debe retornar null si el cliente no existe")
-    void guardarReserva_clienteNoExiste() {
+    public void testGuardarReservaClienteNoExiste() {
         // GIVEN
         when(clienteClient.obtenerClientePorId(1)).thenReturn(null);
 
@@ -207,7 +216,7 @@ class ReservaServiceTest {
 
     @Test
     @DisplayName("Debe retornar null si el vehículo no existe")
-    void guardarReserva_vehiculoNoExiste() {
+    public void testGuardarReservaVehiculoNoExiste() {
         // GIVEN
         when(clienteClient.obtenerClientePorId(1)).thenReturn(clienteDTO);
         when(vehiculoClient.obtenerVehiculoPorId(1)).thenReturn(null);
@@ -222,7 +231,7 @@ class ReservaServiceTest {
 
     @Test
     @DisplayName("Debe retornar null si el estado de reserva no existe")
-    void guardarReserva_estadoNoExiste() {
+    public void testGuardarReservaEstadoNoExiste() {
         // GIVEN
         when(clienteClient.obtenerClientePorId(1)).thenReturn(clienteDTO);
         when(vehiculoClient.obtenerVehiculoPorId(1)).thenReturn(vehiculoDTO);
@@ -242,7 +251,7 @@ class ReservaServiceTest {
 
     @Test
     @DisplayName("Debe actualizar una reserva existente correctamente")
-    void actualizarReserva_exitoso() {
+    public void testActualizarReserva() {
         // GIVEN
         when(reservaRepository.findById(1)).thenReturn(Optional.of(reserva));
         when(clienteClient.obtenerClientePorId(1)).thenReturn(clienteDTO);
@@ -260,7 +269,7 @@ class ReservaServiceTest {
 
     @Test
     @DisplayName("Debe retornar null al actualizar si la reserva no existe")
-    void actualizarReserva_noExiste() {
+    public void testActualizarReservaNoExiste() {
         // GIVEN
         when(reservaRepository.findById(99)).thenReturn(Optional.empty());
 
@@ -278,7 +287,7 @@ class ReservaServiceTest {
 
     @Test
     @DisplayName("Debe eliminar una reserva existente y retornar true")
-    void eliminarReserva_exitoso() {
+    public void testEliminarReserva() {
         // GIVEN
         when(reservaRepository.findById(1)).thenReturn(Optional.of(reserva));
         doNothing().when(reservaRepository).delete(reserva);
@@ -293,7 +302,7 @@ class ReservaServiceTest {
 
     @Test
     @DisplayName("Debe retornar false al eliminar si la reserva no existe")
-    void eliminarReserva_noExiste() {
+    public void testEliminarReservaNoExiste() {
         // GIVEN
         when(reservaRepository.findById(99)).thenReturn(Optional.empty());
 
@@ -311,7 +320,7 @@ class ReservaServiceTest {
 
     @Test
     @DisplayName("Debe retornar reservas desde una fecha dada")
-    void buscarReservasDesdeFecha_retornaLista() {
+    public void testBuscarReservasDesdeFecha() {
         // GIVEN
         LocalDate fecha = LocalDate.now().minusDays(7);
         when(reservaRepository.buscarReservasDesdeFecha(fecha)).thenReturn(List.of(reserva));

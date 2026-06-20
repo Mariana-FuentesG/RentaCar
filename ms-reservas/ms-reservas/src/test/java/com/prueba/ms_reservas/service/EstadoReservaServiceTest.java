@@ -1,17 +1,15 @@
-package com.prueba.ms_reservas;
+package com.prueba.ms_reservas.service;
 
 import com.prueba.ms_reservas.dto.EstadoReservaDTO;
 import com.prueba.ms_reservas.model.EstadoReserva;
 import com.prueba.ms_reservas.repository.EstadoReservaRepository;
-import com.prueba.ms_reservas.service.EstadoReservaService;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,14 +19,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-class EstadoReservaServiceTest {
+@SpringBootTest
+public class EstadoReservaServiceTest {
 
-    @Mock
-    private EstadoReservaRepository estadoReservaRepository;
-
-    @InjectMocks
+    // Inyecta el servicio real de EstadoReserva para ser probado
+    @Autowired
     private EstadoReservaService estadoReservaService;
+
+    // Crea un mock del repositorio para simular su comportamiento
+    @MockitoBean
+    private EstadoReservaRepository estadoReservaRepository;
 
     private final Faker faker = new Faker();
 
@@ -36,11 +36,13 @@ class EstadoReservaServiceTest {
     private EstadoReservaDTO estadoReservaDTO;
 
     @BeforeEach
-    void setUp() {
-        // GIVEN → datos base reutilizables
+    public void setUp() {
+        // GIVEN → datos base reutilizables en todos los tests
         estadoReserva = new EstadoReserva();
         estadoReserva.setId(1);
-        estadoReserva.setNombreEstado(faker.lorem().word());
+        estadoReserva.setNombreEstado(faker.options().option(
+                "Pendiente", "Confirmada", "Pagada", "Cancelada"
+        ));
         estadoReserva.setPrioridad(faker.number().numberBetween(1, 5));
         estadoReserva.setActivo(true);
         estadoReserva.setFechaCreacion(LocalDate.now());
@@ -61,7 +63,7 @@ class EstadoReservaServiceTest {
 
     @Test
     @DisplayName("Debe retornar lista con todos los estados de reserva")
-    void obtenerEstadosReserva_retornaLista() {
+    public void testObtenerEstadosReserva() {
         // GIVEN
         when(estadoReservaRepository.findAll()).thenReturn(List.of(estadoReserva));
 
@@ -78,7 +80,7 @@ class EstadoReservaServiceTest {
 
     @Test
     @DisplayName("Debe retornar lista vacía si no hay estados")
-    void obtenerEstadosReserva_listaVacia() {
+    public void testObtenerEstadosReservaVacio() {
         // GIVEN
         when(estadoReservaRepository.findAll()).thenReturn(List.of());
 
@@ -96,7 +98,7 @@ class EstadoReservaServiceTest {
 
     @Test
     @DisplayName("Debe retornar un estado de reserva existente por ID")
-    void obtenerEstadoReservaPorId_existente() {
+    public void testObtenerEstadoReservaPorId() {
         // GIVEN
         when(estadoReservaRepository.findById(1)).thenReturn(Optional.of(estadoReserva));
 
@@ -111,7 +113,7 @@ class EstadoReservaServiceTest {
 
     @Test
     @DisplayName("Debe lanzar excepción si el estado no existe")
-    void obtenerEstadoReservaPorId_noExiste() {
+    public void testObtenerEstadoReservaPorIdNoExiste() {
         // GIVEN
         when(estadoReservaRepository.findById(99)).thenReturn(Optional.empty());
 
@@ -126,7 +128,7 @@ class EstadoReservaServiceTest {
 
     @Test
     @DisplayName("Debe guardar un estado de reserva correctamente")
-    void guardarEstadoReserva_exitoso() {
+    public void testGuardarEstadoReserva() {
         // GIVEN
         when(estadoReservaRepository.save(any(EstadoReserva.class))).thenReturn(estadoReserva);
 
@@ -145,7 +147,7 @@ class EstadoReservaServiceTest {
 
     @Test
     @DisplayName("Debe actualizar un estado de reserva existente")
-    void actualizarEstadoReserva_exitoso() {
+    public void testActualizarEstadoReserva() {
         // GIVEN
         EstadoReservaDTO dtoActualizado = new EstadoReservaDTO();
         dtoActualizado.setNombreEstado("Confirmada");
@@ -167,7 +169,7 @@ class EstadoReservaServiceTest {
 
     @Test
     @DisplayName("Debe retornar null al actualizar si el estado no existe")
-    void actualizarEstadoReserva_noExiste() {
+    public void testActualizarEstadoReservaNoExiste() {
         // GIVEN
         when(estadoReservaRepository.findById(99)).thenReturn(Optional.empty());
 
@@ -185,7 +187,7 @@ class EstadoReservaServiceTest {
 
     @Test
     @DisplayName("Debe eliminar un estado existente y retornar true")
-    void eliminarEstadoReserva_exitoso() {
+    public void testEliminarEstadoReserva() {
         // GIVEN
         when(estadoReservaRepository.findById(1)).thenReturn(Optional.of(estadoReserva));
         doNothing().when(estadoReservaRepository).delete(estadoReserva);
@@ -200,7 +202,7 @@ class EstadoReservaServiceTest {
 
     @Test
     @DisplayName("Debe retornar false al eliminar si el estado no existe")
-    void eliminarEstadoReserva_noExiste() {
+    public void testEliminarEstadoReservaNoExiste() {
         // GIVEN
         when(estadoReservaRepository.findById(99)).thenReturn(Optional.empty());
 
