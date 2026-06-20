@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 @Profile("dev")
@@ -26,7 +27,7 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args){
-        Faker faker = new Faker();
+        Faker faker = new Faker(new Locale("es"));
         Random random = new Random();
 
         // FLYWAY ya insertó los 5 estados y 2 reservas
@@ -55,13 +56,23 @@ public class DataLoader implements CommandLineRunner {
             reserva.setFechaInicio(fechaInicio);
             reserva.setFechaTermino(fechaTermino);
             reserva.setFechaReserva(fechaReserva);
-            reserva.setObservacion(faker.lorem().sentence());
+            reserva.setObservacion(faker.options().option(
+                    "Cliente solicita entrega en sucursal central",
+                    "Reserva para viaje de fin de semana",
+                    "Cliente prefiere vehículo con GPS incluido",
+                    "Solicita silla para niño adicional",
+                    "Cliente requiere seguro adicional",
+                    "Entrega en aeropuerto solicitada",
+                    "Cliente viaja por motivos de trabajo",
+                    "Requiere vehículo con transmisión automática",
+                    "Cliente solicita revisión previa del vehículo",
+                    "Reserva corporativa, requiere factura"));
             reserva.setEstadoReserva(
                     estados.get(random.nextInt(estados.size())));
 
             reservaRepository.save(reserva);
         }
 
-        System.out.println("✅ DataLoader: 10 reservas adicionales generadas con Faker.");
+        System.out.println("✅ DataLoader: 10 reservas adicionales generadas con Faker correctamente.");
     }
 }
