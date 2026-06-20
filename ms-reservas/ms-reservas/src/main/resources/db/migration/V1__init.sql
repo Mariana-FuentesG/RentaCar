@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS estado_reserva(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL UNIQUE,
+    nombre_estado VARCHAR(50) NOT NULL UNIQUE,
     prioridad INT NOT NULL,
     activo BOOLEAN NOT NULL,
     fecha_creacion DATE NOT NULL,

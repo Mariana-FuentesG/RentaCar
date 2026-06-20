@@ -21,7 +21,7 @@ public class EstadoReserva {
     private Integer id;
 
     @Column(nullable = false, unique = true, length = 50)
-    private String nombre;
+    private String nombreEstado;
 
     @Column(nullable = false)
     private Integer prioridad;

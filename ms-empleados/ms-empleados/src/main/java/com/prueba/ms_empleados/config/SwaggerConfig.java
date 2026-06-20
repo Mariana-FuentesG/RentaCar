@@ -6,14 +6,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class OpenApiConfig {
+public class SwaggerConfig {
 
     @Bean
     public OpenAPI msEmpleadosOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
                         .title("MS Empleados API")
-                        .description("Gestión de empleados de RentaCar")
+                        .description("Gestión de empleados para RentaCar")
                         .version("v1.0"));
     }
 }

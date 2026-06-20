@@ -8,7 +8,7 @@ public class EstadoReservaMapper {
     public static EstadoReservaDTO toDTO(EstadoReserva estadoReserva){
         return new EstadoReservaDTO(
                 estadoReserva.getId(),
-                estadoReserva.getNombre(),
+                estadoReserva.getNombreEstado(),
                 estadoReserva.getPrioridad(),
                 estadoReserva.getActivo(),
                 estadoReserva.getFechaCreacion(),
@@ -20,7 +20,7 @@ public class EstadoReservaMapper {
     public static EstadoReserva toEntity(EstadoReservaDTO dto){
         return new EstadoReserva(
                 dto.getId(),
-                dto.getNombre(),
+                dto.getNombreEstado(),
                 dto.getPrioridad(),
                 dto.getActivo(),
                 dto.getFechaCreacion(),

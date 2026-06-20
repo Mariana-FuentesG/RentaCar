@@ -25,7 +25,7 @@ public class ReservaMapper {
             dto.setEstadoReservaId(
                     reserva.getEstadoReserva().getId());
             dto.setNombreEstado(
-                    reserva.getEstadoReserva().getNombre());
+                    reserva.getEstadoReserva().getNombreEstado());
         }
 
         return dto;

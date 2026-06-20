@@ -11,12 +11,14 @@ import com.prueba.ms_reservas.model.Reserva;
 import com.prueba.ms_reservas.repository.EstadoReservaRepository;
 import com.prueba.ms_reservas.repository.ReservaRepository;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class ReservaService {
 
@@ -173,41 +175,41 @@ public class ReservaService {
         }
     }
 
-    // FEIGNCLIENT → COMPLETAR DATOS
-    private ReservaDTO convertirConDetalles(Reserva reserva) {
-        ReservaDTO dto =
-                ReservaMapper.toDTO(reserva);
-        // CLIENTE
-        try {
-            ClienteDTO cliente = clienteClient.obtenerClientePorId(
-                            reserva.getClienteId());
-            if (cliente != null) {
-                dto.setNombreCliente(
-                        cliente.getNombreCompleto());
-            }
-        } catch (Exception e) {
-            dto.setNombreCliente(
-                    "❌ Servicio clientes no disponible");
-        }
+   /// FEIGNCLIENT → COMPLETAR DATOS
+   private ReservaDTO convertirConDetalles(Reserva reserva) {
+       ReservaDTO dto = ReservaMapper.toDTO(reserva);
 
-        // VEHICULO
-        try {
-            VehiculoDTO vehiculo =
-                    vehiculoClient.obtenerVehiculoPorId(
-                            reserva.getVehiculoId());
-            if (vehiculo != null) {
+       // CLIENTE
+       try {
+           ClienteDTO cliente = clienteClient.obtenerClientePorId(
+                   reserva.getClienteId());
+           log.info(">>> Cliente recibido: {}", cliente);
+           log.info(">>> NombreCompleto: {}", cliente != null ? cliente.getNombreCompleto() : "NULL");
+           if (cliente != null) {
+               dto.setNombreCliente(
+                       cliente.getNombreCompleto());
+           }
+       } catch (Exception e) {
+           log.error("❌ Error cliente: {}", e.getMessage());
+           dto.setNombreCliente(
+                   "❌ Servicio clientes no disponible");
+       }
 
-                dto.setMarcaVehiculo(
-                        vehiculo.getMarca());
-                dto.setModeloVehiculo(
-                        vehiculo.getModelo());
-            }
-        } catch (Exception e) {
-            dto.setMarcaVehiculo(
-                    "❌ Marca vehículos no disponible");
-            dto.setModeloVehiculo(
-                    "❌ Modelo vehículos no disponible");
-        }
-        return dto;
-    }
+       // VEHICULO
+       try {
+           VehiculoDTO vehiculo =
+                   vehiculoClient.obtenerVehiculoPorId(
+                           reserva.getVehiculoId());
+           if (vehiculo != null) {
+               dto.setMarcaVehiculo(vehiculo.getMarca());
+               dto.setModeloVehiculo(vehiculo.getModelo());
+           }
+       } catch (Exception e) {
+           dto.setMarcaVehiculo(
+                   "❌ Marca vehículos no disponible");
+           dto.setModeloVehiculo(
+                   "❌ Modelo vehículos no disponible");
+       }
+       return dto;
+   }
 }
