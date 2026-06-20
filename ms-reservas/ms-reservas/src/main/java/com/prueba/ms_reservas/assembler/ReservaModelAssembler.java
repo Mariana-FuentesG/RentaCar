@@ -21,7 +21,7 @@ public class ReservaModelAssembler
         implements RepresentationModelAssembler<ReservaDTO, EntityModel<ReservaDTO>> {
 
     @Override
-    public EntityModel<ReservaDTO> toModel(@NonNull ReservaDTO reserva) {
+    public EntityModel<ReservaDTO> toModel(ReservaDTO reserva) {
 
         EntityModel<ReservaDTO> model = EntityModel.of(reserva,
                 // ENLACE SELF → ESTA MISMA RESERVA

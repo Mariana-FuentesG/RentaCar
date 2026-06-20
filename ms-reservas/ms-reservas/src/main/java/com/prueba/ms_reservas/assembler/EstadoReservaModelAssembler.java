@@ -2,6 +2,7 @@ package com.prueba.ms_reservas.assembler;
 
 import com.prueba.ms_reservas.controller.EstadoReservaController;
 import com.prueba.ms_reservas.dto.EstadoReservaDTO;
+import org.jspecify.annotations.NonNull;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ public class EstadoReservaModelAssembler
         implements RepresentationModelAssembler<EstadoReservaDTO, EntityModel<EstadoReservaDTO>> {
 
     @Override
-    public EntityModel<EstadoReservaDTO> toModel(EstadoReservaDTO estado) {
+    public  @NonNull EntityModel<EstadoReservaDTO> toModel( @NonNull EstadoReservaDTO estado) {
         return EntityModel.of(estado,
                 // ENLACE SELF → ESTE MISMO ESTADO
                 linkTo(methodOn(EstadoReservaController.class)
