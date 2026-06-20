@@ -216,7 +216,7 @@ public class ReservaController {
             @ApiResponse(responseCode = "404", description = "No se encontraron reservas para la fecha indicada")
     })
     public ResponseEntity<CollectionModel<EntityModel<ReservaDTO>>> buscarReservasDesdeFecha(
-            @Parameter(description = "Fecha desde (formato: YYYY-MM-DD)", example = "2026-06-01")
+            @Parameter(description = "Fecha desde (formato: YYYY-MM-DD)")
             @PathVariable LocalDate fecha) {
 
         List<ReservaDTO> reservas = reservaService.buscarReservasDesdeFecha(fecha);
