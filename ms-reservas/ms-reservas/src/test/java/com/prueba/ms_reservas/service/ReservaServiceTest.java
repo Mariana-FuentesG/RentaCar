@@ -73,8 +73,8 @@ public class ReservaServiceTest {
         reserva.setMontoReserva(faker.number().randomDouble(2, 50000, 500000));
         reserva.setCantidadDias(faker.number().numberBetween(1, 15));
         reserva.setPagada(false);
-        reserva.setFechaInicio(LocalDate.now());
-        reserva.setFechaTermino(LocalDate.now().plusDays(3));
+        reserva.setFechaInicio(LocalDate.now().plusDays(1));
+        reserva.setFechaTermino(LocalDate.now().plusDays(4));
         reserva.setFechaReserva(LocalDate.now());
         reserva.setObservacion(faker.options().option(
                 "Cliente solicita entrega en sucursal central",

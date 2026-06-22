@@ -31,11 +31,14 @@ public class GlobalExceptionHandler {
                 .status(404)
                 .body(ex.getMessage());
     }
-    //Conflicto asociación de datos -> responde 409
+    // Conflicto asociación de datos -> responde 409
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<String> handleDataIntegrity(DataIntegrityViolationException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body("No se puede eliminar el estado porque tiene reservas asociadas");
+    public ResponseEntity<String> handleDataIntegrity(
+            DataIntegrityViolationException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body("No se puede eliminar el estado porque tiene reservas asociadas: "
+                        + ex.getMostSpecificCause().getMessage());
     }
 
     // Captura cualquier otro error inesperado -> responde 500

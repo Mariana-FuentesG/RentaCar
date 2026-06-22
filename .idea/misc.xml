@@ -11,7 +11,15 @@
         <option value="$PROJECT_DIR$/ms-empleados/ms-empleados/pom.xml" />
         <option value="$PROJECT_DIR$/ms-vehiculos/ms-vehiculos/pom.xml" />
         <option value="$PROJECT_DIR$/ms-sucursales/ms-sucursales/pom.xml" />
+        <option value="$PROJECT_DIR$/Externos/pom.xml" />
+        <option value="$PROJECT_DIR$/eureka-server/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/Externos/pom.xml" />
+        <option value="$PROJECT_DIR$/eureka-server/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="17" project-jdk-type="JavaSDK">

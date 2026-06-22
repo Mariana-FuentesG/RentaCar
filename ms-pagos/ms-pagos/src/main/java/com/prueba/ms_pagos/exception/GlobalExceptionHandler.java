@@ -39,7 +39,8 @@ public class GlobalExceptionHandler {
             DataIntegrityViolationException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body("No se puede eliminar el pago porque tiene registros asociados");
+                .body("No se puede eliminar porque tiene registros asociadas: "
+                        + ex.getMostSpecificCause().getMessage());
     }
 
     // Captura cualquier otro error inesperado -> responde 500

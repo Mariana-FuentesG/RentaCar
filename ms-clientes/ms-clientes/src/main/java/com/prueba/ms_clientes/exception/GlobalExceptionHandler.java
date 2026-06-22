@@ -40,7 +40,8 @@ public class GlobalExceptionHandler {
             DataIntegrityViolationException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body("No se puede eliminar el cliente porque tiene registros asociados");
+                .body("No se puede eliminar cliente porque tiene registros asociados: "
+                        + ex.getMostSpecificCause().getMessage());
     }
 
     // Captura cualquier otro error inesperado -> responde 500

@@ -1,5 +1,7 @@
 package com.prueba.ms_vehiculos.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,6 +32,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(404)
                 .body(ex.getMessage());
+    }
+
+    // Conflicto asociación de datos -> responde 409
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handleDataIntegrity(
+            DataIntegrityViolationException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body("No se puede eliminar el vehiculo porque tiene registros asociados: "
+                        + ex.getMostSpecificCause().getMessage());
     }
 
     // Captura cualquier otro error inesperado -> responde 500

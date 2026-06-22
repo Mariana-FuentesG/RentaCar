@@ -1,0 +1,60 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        # RUTAS → MS-CLIENTES (puerto 8081)
+        - id: ms-clientes-route
+          uri: lb://MS-CLIENTES
+          predicates:
+            - Path=/api/v1/clientes/**
+
+        - id: ms-direcciones-route
+          uri: lb://MS-CLIENTES
+          predicates:
+            - Path=/api/v1/direcciones/**
+
+        # RUTAS → MS-VEHICULOS (puerto 8082)
+        - id: ms-vehiculos-route
+          uri: lb://MS-VEHICULOS
+          predicates:
+            - Path=/api/v1/vehiculos/**
+
+        - id: ms-categorias-route
+          uri: lb://MS-VEHICULOS
+          predicates:
+            - Path=/api/v1/categorias/**
+
+        # RUTAS → MS-RESERVAS (puerto 8083)
+        - id: ms-reservas-route
+          uri: lb://MS-RESERVAS
+          predicates:
+            - Path=/api/v1/reservas/**
+
+        - id: ms-estados-reserva-route
+          uri: lb://MS-RESERVAS
+          predicates:
+            - Path=/api/v1/estados-reserva/**
+
+        # RUTAS → MS-PAGOS (puerto 8084)
+        - id: ms-pagos-route
+          uri: lb://MS-PAGOS
+          predicates:
+            - Path=/api/v1/pagos/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG

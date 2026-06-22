@@ -47,9 +47,9 @@ public class ReservaControllerTest {
         reservaDTO.setMontoReserva(150000.0);
         reservaDTO.setCantidadDias(3);
         reservaDTO.setPagada(false);
-        reservaDTO.setFechaInicio(LocalDate.of(2026, 6, 20));
-        reservaDTO.setFechaTermino(LocalDate.of(2026, 6, 23));
-        reservaDTO.setFechaReserva(LocalDate.of(2026, 6, 19));
+        reservaDTO.setFechaInicio(LocalDate.now().plusDays(1));
+        reservaDTO.setFechaTermino(LocalDate.now().plusDays(4));
+        reservaDTO.setFechaReserva(LocalDate.now());
         reservaDTO.setObservacion("Cliente solicita entrega en sucursal central");
         reservaDTO.setEstadoReservaId(1);
         reservaDTO.setNombreEstado("Pendiente");
