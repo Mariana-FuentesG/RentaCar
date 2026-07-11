@@ -7,7 +7,7 @@ import com.prueba.ms_clientes.model.Direccion;
 public class DireccionMapper {
 
     // ENTITY → DTO
-    public static DireccionDTO toDTO(Direccion direccion){
+    public static DireccionDTO toDTO(Direccion direccion) {
         return new DireccionDTO(
                 direccion.getId(),
                 direccion.getCalle(),
@@ -18,15 +18,14 @@ public class DireccionMapper {
                 direccion.getEstado(),
                 direccion.getFechaRegistro(),
 
-                // DATOS CLIENTE RELACIONADO
-                direccion.getCliente().getId(),
-                direccion.getCliente().getNombreCompleto()
+                // DATOS CLIENTE RELACIONADO — null check para evitar NullPointerException
+                direccion.getCliente() != null ? direccion.getCliente().getId() : null,
+                direccion.getCliente() != null ? direccion.getCliente().getNombreCompleto() : null
         );
     }
 
     // DTO → ENTITY
-    public static Direccion toEntity(DireccionDTO dto){
-
+    public static Direccion toEntity(DireccionDTO dto) {
         Direccion direccion = new Direccion();
         direccion.setId(dto.getId());
         direccion.setCalle(dto.getCalle());
@@ -38,10 +37,11 @@ public class DireccionMapper {
         direccion.setFechaRegistro(dto.getFechaRegistro());
 
         // RELACION MANY TO ONE CON CLIENTE
-        Cliente cliente = new Cliente();
-        cliente.setId(dto.getClienteId());
-
-        direccion.setCliente(cliente);
+        if (dto.getClienteId() != null) {
+            Cliente cliente = new Cliente();
+            cliente.setId(dto.getClienteId());
+            direccion.setCliente(cliente);
+        }
 
         return direccion;
     }

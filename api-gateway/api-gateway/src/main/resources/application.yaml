@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    compatibility-verifier:
+      enabled: false
+    gateway:
+      mvc:
+        routes:
+          # ms-sucursales expone /api/v1/sucursales y /api/v1/regiones
+          - id: ms-sucursales
+            uri: lb://ms-sucursales
+            predicates:
+              - Path=/api/v1/sucursales/**,/api/v1/regiones/**
+
+          # ms-reportes expone /api/v1/reportes (incluye proxy a ms-reservas y ms-pagos via Feign)
+          - id: ms-reportes
+            uri: lb://ms-reportes
+            predicates:
+              - Path=/api/v1/reportes/**
+
+        discovery:
+          locator:
+            # Fallback: cualquier microservicio registrado en Eureka queda accesible
+            # también en /{nombre-servicio-en-minuscula}/** sin necesidad de ruta explícita.
+            enabled: true
+            lower-case-service-id: true
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO

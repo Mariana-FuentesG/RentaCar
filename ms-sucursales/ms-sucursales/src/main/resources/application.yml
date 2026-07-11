@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: ms-sucursales
+  profiles:
+    active: dev
+  cloud:
+    compatibility-verifier:
+      enabled: false
+
+server:
+  port: 8085
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  enable-hateoas: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/prueba1_dev?useSSL=false&serverTimezone=America/Santiago&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+    username: root
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:mysql://localhost:3306/prueba1_test?useSSL=false&serverTimezone=America/Santiago&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+    username: root
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+eureka:
+  client:
+    enabled: false

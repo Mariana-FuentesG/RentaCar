@@ -5,30 +5,38 @@ import com.prueba.ms_reservas.model.EstadoReserva;
 import com.prueba.ms_reservas.model.Reserva;
 
 public class ReservaMapper {
-    public static ReservaDTO toDTO(Reserva reserva) {
-        return new ReservaDTO(
-                reserva.getId(),
-                reserva.getClienteId(),
-                reserva.getVehiculoId(),
-                reserva.getMontoTotal(),
-                reserva.getCantidadDias(),
-                reserva.getPagada(),
-                reserva.getFechaInicio(),
-                reserva.getFechaTermino(),
-                reserva.getFechaReserva(),
-                reserva.getObservacion(),
 
-                //DATOS DEL ESTADO RELACIONADO
-                reserva.getEstadoReserva().getId(),
-                reserva.getEstadoReserva().getNombre()
-        );
+    public static ReservaDTO toDTO(Reserva reserva) {
+        ReservaDTO dto = new  ReservaDTO();
+
+        dto.setId(reserva.getId());
+        dto.setClienteId(reserva.getClienteId());
+        dto.setVehiculoId(reserva.getVehiculoId());
+        dto.setMontoReserva(reserva.getMontoReserva());
+        dto.setCantidadDias(reserva.getCantidadDias());
+        dto.setPagada(reserva.getPagada());
+        dto.setFechaInicio(reserva.getFechaInicio());
+        dto.setFechaTermino(reserva.getFechaTermino());
+        dto.setFechaReserva(reserva.getFechaReserva());
+        dto.setObservacion(reserva.getObservacion());
+
+        // ESTADO
+        if(reserva.getEstadoReserva() != null){
+            dto.setEstadoReservaId(
+                    reserva.getEstadoReserva().getId());
+            dto.setNombreEstado(
+                    reserva.getEstadoReserva().getNombreEstado());
+        }
+
+        return dto;
     }
+
     public static Reserva toEntity(ReservaDTO dto) {
         Reserva reserva = new Reserva();
         reserva.setId(dto.getId());
         reserva.setClienteId(dto.getClienteId());
         reserva.setVehiculoId(dto.getVehiculoId());
-        reserva.setMontoTotal(dto.getMontoTotal());
+        reserva.setMontoReserva(dto.getMontoReserva());
         reserva.setCantidadDias(dto.getCantidadDias());
         reserva.setPagada(dto.getPagada());
         reserva.setFechaInicio(dto.getFechaInicio());
@@ -37,9 +45,11 @@ public class ReservaMapper {
         reserva.setObservacion(dto.getObservacion());
 
         // RELACION MANY TO ONE
-        EstadoReserva estadoReserva = new EstadoReserva();
-        estadoReserva.setId(dto.getEstadoReservaId());
-        reserva.setEstadoReserva(estadoReserva);
+        if (dto.getEstadoReservaId() != null) {
+            EstadoReserva estadoReserva = new EstadoReserva();
+            estadoReserva.setId(dto.getEstadoReservaId());
+            reserva.setEstadoReserva(estadoReserva);
+        }
         return reserva;
     }
 }

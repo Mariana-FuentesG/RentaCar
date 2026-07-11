@@ -1,5 +1,7 @@
 package com.prueba.ms_reservas.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,6 +22,25 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining(", "));
         return ResponseEntity.badRequest().body(error); // 400
     }
+    // Recurso no encontrado -> 404
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleResourceNotFound(
+            ResourceNotFoundException ex) {
+
+        return ResponseEntity
+                .status(404)
+                .body(ex.getMessage());
+    }
+    // Conflicto asociación de datos -> responde 409
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handleDataIntegrity(
+            DataIntegrityViolationException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body("No se puede eliminar el estado porque tiene reservas asociadas: "
+                        + ex.getMostSpecificCause().getMessage());
+    }
+
     // Captura cualquier otro error inesperado -> responde 500
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericError(Exception ex) {

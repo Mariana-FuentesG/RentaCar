@@ -7,9 +7,9 @@ import com.prueba.ms_reservas.repository.EstadoReservaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Service
 public class EstadoReservaService {
     @Autowired
@@ -32,13 +32,13 @@ public class EstadoReservaService {
 
     // GET → BUSCAR POR ID
     public EstadoReservaDTO obtenerEstadoReservaPorId(Integer id){
-        EstadoReserva estadoReserva =
-                estadoReservaRepository.findById(id)
-                        .orElse(null);
-        if(estadoReserva == null){
-            return null;
-        }
-        return EstadoReservaMapper.toDTO(estadoReserva);
+        EstadoReserva estado = estadoReservaRepository
+                .findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Estado no encontrado"
+                        ));
+        return EstadoReservaMapper.toDTO(estado);
     }
 
     // PUT → ACTUALIZAR
@@ -51,7 +51,7 @@ public class EstadoReservaService {
             if(estadoReserva == null){
                 return null;
             }
-            estadoReserva.setNombre(dto.getNombre());
+            estadoReserva.setNombreEstado(dto.getNombreEstado());
             estadoReserva.setPrioridad(dto.getPrioridad());
             estadoReserva.setActivo(dto.getActivo());
             estadoReserva.setFechaCreacion(dto.getFechaCreacion());
@@ -60,7 +60,7 @@ public class EstadoReservaService {
             return EstadoReservaMapper.toDTO(actualizado);
         }catch (Exception e){
             throw new RuntimeException(
-                    "Error al actualizar estado reserva");
+                    "Error al actualizar el estado de la reserva");
         }
     }
 

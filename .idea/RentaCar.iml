@@ -2,7 +2,24 @@
 <module type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_25" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/Externos/api-gateway/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Externos/api-gateway/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/Externos/api-gateway/src/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/Externos/eureka-server/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Externos/eureka-server/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/Externos/eureka-server/src/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/eureka-server/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/eureka-server/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/eureka-server/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/eureka-server/eureka-server/src/main/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/eureka-server/eureka-server/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/eureka-server/eureka-server/src/test" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/Externos/api-gateway/target" />
+      <excludeFolder url="file://$MODULE_DIR$/Externos/eureka-server/target" />
+      <excludeFolder url="file://$MODULE_DIR$/eureka-server/target" />
+      <excludeFolder url="file://$MODULE_DIR$/eureka-server/eureka-server/target" />
+    </content>
     <orderEntry type="jdk" jdkName="openjdk-26" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

@@ -1,0 +1,24 @@
+# Configuración exclusiva para la ejecución de pruebas automatizadas (JUnit).
+# Sobrescribe la de src/main/resources en el classpath de test: usa H2 en memoria
+# para no depender de una instancia real de MySQL al correr `mvn test`.
+spring:
+  application:
+    name: ms-sucursales
+  datasource:
+    url: jdbc:h2:mem:sucursales_test;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  cloud:
+    compatibility-verifier:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
+eureka:
+  client:
+    enabled: false
+springdoc:
+  enable-hateoas: false

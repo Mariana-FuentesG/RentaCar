@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS PAGOS(
+ id INT AUTO_INCREMENT PRIMARY KEY,
+ reserva_id INT NOT NULL,
+ monto DOUBLE NOT NULL,
+ pagado BOOLEAN NOT NULL,
+ fecha_pago DATE NOT NULL,
+ metodo_pago VARCHAR(50) NOT NULL,
+ cant_cuotas INT NOT NULL
+);
