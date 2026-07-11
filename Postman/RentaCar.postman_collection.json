@@ -1,0 +1,175 @@
+{
+  "info": {
+    "name": "RentaCar - EFT DSY1103",
+    "description": "Colección de pruebas para ms-sucursales y ms-reportes, a través del API Gateway (localhost:8080). Ajusta la variable {{gateway}} si tu puerto es distinto.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "gateway", "value": "http://localhost:8080" },
+    { "key": "sucursalId", "value": "1" },
+    { "key": "regionId", "value": "1" },
+    { "key": "reporteId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Sucursales",
+      "item": [
+        {
+          "name": "Listar sucursales",
+          "request": { "method": "GET", "url": "{{gateway}}/api/v1/sucursales" }
+        },
+        {
+          "name": "Listar sucursales operativas",
+          "request": { "method": "GET", "url": "{{gateway}}/api/v1/sucursales/operativas" }
+        },
+        {
+          "name": "Buscar sucursal por id",
+          "request": { "method": "GET", "url": "{{gateway}}/api/v1/sucursales/{{sucursalId}}" }
+        },
+        {
+          "name": "Crear sucursal",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{gateway}}/api/v1/sucursales",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Sucursal Rancagua\",\n  \"direccion\": \"Av. Libertador 500\",\n  \"telefono\": \"972345678\",\n  \"ciudad\": \"Rancagua\",\n  \"activa\": true,\n  \"cantidadVehiculos\": 12,\n  \"regionId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Actualizar sucursal",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{gateway}}/api/v1/sucursales/{{sucursalId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Sucursal Santiago Centro\",\n  \"direccion\": \"Alameda 123\",\n  \"telefono\": \"987654321\",\n  \"ciudad\": \"Santiago\",\n  \"activa\": true,\n  \"cantidadVehiculos\": 25,\n  \"regionId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Eliminar sucursal",
+          "request": { "method": "DELETE", "url": "{{gateway}}/api/v1/sucursales/{{sucursalId}}" }
+        }
+      ]
+    },
+    {
+      "name": "Regiones",
+      "item": [
+        {
+          "name": "Listar regiones",
+          "request": { "method": "GET", "url": "{{gateway}}/api/v1/regiones" }
+        },
+        {
+          "name": "Buscar region por id",
+          "request": { "method": "GET", "url": "{{gateway}}/api/v1/regiones/{{regionId}}" }
+        },
+        {
+          "name": "Crear region",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{gateway}}/api/v1/regiones",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Coquimbo\",\n  \"codigo\": \"IV\",\n  \"activa\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Actualizar region",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{gateway}}/api/v1/regiones/{{regionId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Metropolitana\",\n  \"codigo\": \"RM\",\n  \"activa\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Eliminar region",
+          "request": { "method": "DELETE", "url": "{{gateway}}/api/v1/regiones/{{regionId}}" }
+        }
+      ]
+    },
+    {
+      "name": "Reportes",
+      "item": [
+        {
+          "name": "Listar reportes",
+          "request": { "method": "GET", "url": "{{gateway}}/api/v1/reportes" }
+        },
+        {
+          "name": "Listar reportes activos",
+          "request": { "method": "GET", "url": "{{gateway}}/api/v1/reportes/activos" }
+        },
+        {
+          "name": "Buscar reporte por id",
+          "request": { "method": "GET", "url": "{{gateway}}/api/v1/reportes/{{reporteId}}" }
+        },
+        {
+          "name": "Crear reporte",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{gateway}}/api/v1/reportes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Reporte Quincenal\",\n  \"descripcion\": \"Reporte de prueba creado desde Postman\",\n  \"totalReservas\": 8,\n  \"totalIngresos\": 1800000,\n  \"activo\": true,\n  \"fechaGeneracion\": \"2026-07-01\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Actualizar reporte",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{gateway}}/api/v1/reportes/{{reporteId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Reporte Mensual Actualizado\",\n  \"descripcion\": \"Reporte mensual de reservas y pagos\",\n  \"totalReservas\": 30,\n  \"totalIngresos\": 6000000,\n  \"activo\": true,\n  \"fechaGeneracion\": \"2026-07-01\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Eliminar reporte",
+          "request": { "method": "DELETE", "url": "{{gateway}}/api/v1/reportes/{{reporteId}}" }
+        },
+        {
+          "name": "Consultar reservas (Feign -> ms-reservas)",
+          "request": { "method": "GET", "url": "{{gateway}}/api/v1/reportes/reservas" }
+        },
+        {
+          "name": "Consultar pagos (Feign -> ms-pagos)",
+          "request": { "method": "GET", "url": "{{gateway}}/api/v1/reportes/pagos" }
+        }
+      ]
+    },
+    {
+      "name": "Casos de error (validacion)",
+      "item": [
+        {
+          "name": "Crear sucursal sin nombre (400 esperado)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{gateway}}/api/v1/sucursales",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"\",\n  \"direccion\": \"Calle 1\",\n  \"telefono\": \"911111111\",\n  \"ciudad\": \"Santiago\",\n  \"activa\": true,\n  \"cantidadVehiculos\": 5,\n  \"regionId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Buscar sucursal inexistente (404 esperado)",
+          "request": { "method": "GET", "url": "{{gateway}}/api/v1/sucursales/9999" }
+        }
+      ]
+    }
+  ]
+}
