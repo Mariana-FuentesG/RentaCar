@@ -1,26 +1,33 @@
 package com.prueba.ms_sucursales.mapper;
 
-import com.prueba.ms_sucursales.dto.SucursalDTO;
+import com.prueba.ms_sucursales.dto.request.SucursalRequestDTO;
+import com.prueba.ms_sucursales.dto.response.SucursalResponseDTO;
 import com.prueba.ms_sucursales.model.Region;
 import com.prueba.ms_sucursales.model.Sucursal;
 
 public class SucursalMapper {
-    public static SucursalDTO toDTO(Sucursal sucursal) {
-        return new SucursalDTO(
-                sucursal.getId(),
-                sucursal.getNombre(),
-                sucursal.getDireccion(),
-                sucursal.getTelefono(),
-                sucursal.getCiudad(),
-                sucursal.getActiva(),
-                sucursal.getCantidadVehiculos(),
-                sucursal.getRegion().getId()
-                );
+
+    private SucursalMapper() {
     }
 
-    public static Sucursal toEntity(SucursalDTO dto) {
-        Sucursal sucursal= new Sucursal();
-        sucursal.setId(dto.getId());
+    public static SucursalResponseDTO toResponseDTO(Sucursal sucursal) {
+        SucursalResponseDTO dto = new SucursalResponseDTO();
+        dto.setId(sucursal.getId());
+        dto.setNombre(sucursal.getNombre());
+        dto.setDireccion(sucursal.getDireccion());
+        dto.setTelefono(sucursal.getTelefono());
+        dto.setCiudad(sucursal.getCiudad());
+        dto.setActiva(sucursal.getActiva());
+        dto.setCantidadVehiculos(sucursal.getCantidadVehiculos());
+        if (sucursal.getRegion() != null) {
+            dto.setRegionId(sucursal.getRegion().getId());
+            dto.setRegionNombre(sucursal.getRegion().getNombre());
+        }
+        return dto;
+    }
+
+    public static Sucursal toEntity(SucursalRequestDTO dto) {
+        Sucursal sucursal = new Sucursal();
         sucursal.setNombre(dto.getNombre());
         sucursal.setDireccion(dto.getDireccion());
         sucursal.setTelefono(dto.getTelefono());
@@ -28,7 +35,6 @@ public class SucursalMapper {
         sucursal.setActiva(dto.getActiva());
         sucursal.setCantidadVehiculos(dto.getCantidadVehiculos());
 
-        //RELACION MANY TO ONE
         Region region = new Region();
         region.setId(dto.getRegionId());
         sucursal.setRegion(region);

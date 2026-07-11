@@ -1,99 +1,98 @@
 package com.prueba.ms_sucursales.service;
 
-import com.prueba.ms_sucursales.dto.SucursalDTO;
+import com.prueba.ms_sucursales.dto.request.SucursalRequestDTO;
+import com.prueba.ms_sucursales.exception.ResourceNotFoundException;
 import com.prueba.ms_sucursales.mapper.SucursalMapper;
 import com.prueba.ms_sucursales.model.Region;
 import com.prueba.ms_sucursales.model.Sucursal;
 import com.prueba.ms_sucursales.repository.RegionRepository;
 import com.prueba.ms_sucursales.repository.SucursalRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import java.util.stream.Collectors;
+
 import java.util.List;
 
+/**
+ * La lógica de negocio vive aquí. El Service trabaja con entidades;
+ * la conversión a DTO + enlaces HATEOAS ocurre en el assembler, no aquí.
+ */
 @Service
 public class SucursalService {
-    @Autowired
-    private SucursalRepository sucursalRepository;
 
-    @Autowired
-    private RegionRepository regionRepository;
+    private static final Logger log = LoggerFactory.getLogger(SucursalService.class);
 
-    // GET → LISTAR SUCURSALES
-    public List<SucursalDTO> obtenerSucursales(){
-        return sucursalRepository.findAll()
-                .stream()
-                .map(SucursalMapper::toDTO)
-                .collect(Collectors.toList());
+    private final SucursalRepository sucursalRepository;
+    private final RegionRepository regionRepository;
+
+    public SucursalService(SucursalRepository sucursalRepository, RegionRepository regionRepository) {
+        this.sucursalRepository = sucursalRepository;
+        this.regionRepository = regionRepository;
     }
-
-    // GET → BUSCAR SUCURSAL POR ID
-    public SucursalDTO obtenerSucursalPorId(Integer id){
-        Sucursal sucursal = sucursalRepository.findById(id)
-                        .orElse(null);
-        if(sucursal == null){
-            return null;
-        }
-        return SucursalMapper.toDTO(sucursal);
+    // → LISTAR SUCURSALES
+    public List<Sucursal> obtenerSucursales() {
+        log.info("Listando todas las sucursales");
+        return sucursalRepository.findAll();
     }
-
-    // POST → GUARDAR SUCURSAL
-    public SucursalDTO guardarSucursal(SucursalDTO dto){
+    // → BUSCAR SUCURSAL POR ID
+    public Sucursal obtenerSucursalPorId(Integer id) {
+        log.info("Buscando sucursal con id {}", id);
+        return sucursalRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn("Sucursal con id {} no encontrada", id);
+                    return new ResourceNotFoundException("Sucursal no encontrada con id: " + id);
+                });
+    }
+    // → GUARDAR SUCURSAL
+    public Sucursal guardarSucursal(SucursalRequestDTO dto) {
+        log.info("Creando nueva sucursal: {}", dto.getNombre());
         Region region = regionRepository.findById(dto.getRegionId())
-                        .orElse(null);
+                .orElseThrow(() -> {
+                    log.warn("Region con id {} no encontrada al crear sucursal", dto.getRegionId());
+                    return new ResourceNotFoundException("Región no encontrada con id: " + dto.getRegionId());
+                });
 
-        if(region == null){
-            return null;
-        }
         Sucursal sucursal = SucursalMapper.toEntity(dto);
-
         sucursal.setRegion(region);
         Sucursal guardada = sucursalRepository.save(sucursal);
-        return SucursalMapper.toDTO(guardada);
+        log.info("Sucursal creada con id {}", guardada.getId());
+        return guardada;
     }
+    // → ACTUALIZAR SUCURSAL
+    public Sucursal actualizarSucursal(Integer id, SucursalRequestDTO dto) {
+        log.info("Actualizando sucursal con id {}", id);
+        Sucursal sucursal = sucursalRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Sucursal no encontrada con id: " + id));
 
-    // PUT → ACTUALIZAR SUCURSAL
-    public SucursalDTO actualizarSucursal(Integer id, SucursalDTO dto){
-        try {Sucursal sucursal = sucursalRepository.findById(id)
-                    .orElse(null);
-            if (sucursal == null) {
-                return null;
-            }
-            Region region = regionRepository.findById(dto.getRegionId())
-                    .orElse(null);
-            if (region == null) {return null;
-            }
-            // ACTUALIZAR CAMPOS INDIVIDUALMENTE
-            sucursal.setNombre(dto.getNombre());
-            sucursal.setDireccion(dto.getDireccion());
-            sucursal.setTelefono(dto.getTelefono());
-            sucursal.setCiudad(dto.getCiudad());
-            sucursal.setActiva(dto.getActiva());
-            sucursal.setCantidadVehiculos(dto.getCantidadVehiculos());
+        Region region = regionRepository.findById(dto.getRegionId())
+                .orElseThrow(() -> new ResourceNotFoundException("Región no encontrada con id: " + dto.getRegionId()));
 
-            sucursal.setRegion(region);
-            Sucursal actualizada = sucursalRepository.save(sucursal);
+        sucursal.setNombre(dto.getNombre());
+        sucursal.setDireccion(dto.getDireccion());
+        sucursal.setTelefono(dto.getTelefono());
+        sucursal.setCiudad(dto.getCiudad());
+        sucursal.setActiva(dto.getActiva());
+        sucursal.setCantidadVehiculos(dto.getCantidadVehiculos());
+        sucursal.setRegion(region);
 
-            return SucursalMapper.toDTO(actualizada);
-        }catch(Exception e){
-            return null;
-        }
+        Sucursal actualizada = sucursalRepository.save(sucursal);
+        log.info("Sucursal con id {} actualizada correctamente", id);
+        return actualizada;
     }
-
-    // DELETE → ELIMINAR SUCURSAL
-    public boolean eliminarSucursal(Integer id){
-        if(!sucursalRepository.existsById(id)){
-            return false;
+    //→ ELIMINAR SUCURSAL
+    public void eliminarSucursal(Integer id) {
+        log.info("Eliminando sucursal con id {}", id);
+        if (!sucursalRepository.existsById(id)) {
+            log.warn("Intento de eliminar sucursal inexistente con id {}", id);
+            throw new ResourceNotFoundException("Sucursal no encontrada con id: " + id);
         }
         sucursalRepository.deleteById(id);
-        return true;
+        log.info("Sucursal con id {} eliminada", id);
     }
 
-    //QUERY NATIVE → LISTAR SUCURSALES OPERATIVAS
-    public List<SucursalDTO> obtenerSucursalesOperativas(){
-        return sucursalRepository.obtenerSucursalesOperativas()
-                .stream()
-                .map(SucursalMapper::toDTO)
-                .collect(Collectors.toList());
+    // → LISTAR SUCURSALES OPERATIVAS
+    public List<Sucursal> obtenerSucursalesOperativas() {
+        log.info("Listando sucursales operativas");
+        return sucursalRepository.obtenerSucursalesOperativas();
     }
 }

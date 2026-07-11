@@ -12,9 +12,13 @@
       <sourceFolder url="file://$MODULE_DIR$/eureka-server/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/eureka-server/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/eureka-server/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/eureka-server/eureka-server/src/main/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/eureka-server/eureka-server/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/eureka-server/eureka-server/src/test" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/Externos/api-gateway/target" />
       <excludeFolder url="file://$MODULE_DIR$/Externos/eureka-server/target" />
       <excludeFolder url="file://$MODULE_DIR$/eureka-server/target" />
+      <excludeFolder url="file://$MODULE_DIR$/eureka-server/eureka-server/target" />
     </content>
     <orderEntry type="jdk" jdkName="openjdk-26" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />

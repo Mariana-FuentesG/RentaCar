@@ -1,9 +1,7 @@
-package com.prueba.ms_reportes.dto;
-
+package com.prueba.ms_reportes.dto.request;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,18 +10,14 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Builder
-public class ReporteDTO {
-    private Integer id;
+public class ReporteRequestDTO {
 
     @NotBlank(message = "El titulo es obligatorio")
-    @Size(min = 3, max = 150,
-            message = "El titulo debe tener entre 3 y 150 caracteres")
+    @Size(min = 3, max = 150, message = "El titulo debe tener entre 3 y 150 caracteres")
     private String titulo;
 
     @NotBlank(message = "La descripcion es obligatoria")
-    @Size(min = 5, max = 300,
-            message = "La descripcion debe tener entre 5 y 300 caracteres")
+    @Size(min = 5, max = 300, message = "La descripcion debe tener entre 5 y 300 caracteres")
     private String descripcion;
 
     @NotNull(message = "El total de reservas es obligatorio")
@@ -38,7 +32,6 @@ public class ReporteDTO {
     private Boolean activo;
 
     @NotNull(message = "La fecha de generacion es obligatoria")
-    @PastOrPresent(
-            message = "La fecha de generacion no puede ser futura")
+    @PastOrPresent(message = "La fecha de generacion no puede ser futura")
     private LocalDate fechaGeneracion;
 }

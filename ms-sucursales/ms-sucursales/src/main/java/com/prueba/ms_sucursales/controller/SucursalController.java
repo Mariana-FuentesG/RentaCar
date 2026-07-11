@@ -1,79 +1,94 @@
 package com.prueba.ms_sucursales.controller;
 
-import com.prueba.ms_sucursales.dto.SucursalDTO;
+import com.prueba.ms_sucursales.assembler.SucursalModelAssembler;
+import com.prueba.ms_sucursales.dto.request.SucursalRequestDTO;
+import com.prueba.ms_sucursales.dto.response.SucursalResponseDTO;
+import com.prueba.ms_sucursales.model.Sucursal;
 import com.prueba.ms_sucursales.service.SucursalService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+/**
+ * Solo administra solicitudes/respuestas HTTP. Toda la lógica vive en el Service,
+ * y la construcción de enlaces HATEOAS vive en el Assembler (nunca aquí).
+ */
 @RestController
 @RequestMapping("/api/v1/sucursales")
+@Tag(name = "Sucursales", description = "Gestión de sucursales de RentaCar")
 public class SucursalController {
 
-    @Autowired
-    private SucursalService sucursalService;
+    private static final Logger log = LoggerFactory.getLogger(SucursalController.class);
 
-    // GET → LISTAR TODAS LAS SUCURSALES
+    private final SucursalService sucursalService;
+    private final SucursalModelAssembler assembler;
+
+    public SucursalController(SucursalService sucursalService, SucursalModelAssembler assembler) {
+        this.sucursalService = sucursalService;
+        this.assembler = assembler;
+    }
+
+    @Operation(summary = "Listar todas las sucursales")
     @GetMapping
-    public ResponseEntity<List<SucursalDTO>> obtenerSucursales() {
-        return ResponseEntity.ok(
-                sucursalService.obtenerSucursales()
-        );
+    public ResponseEntity<CollectionModel<SucursalResponseDTO>> obtenerSucursales() {
+        log.info("GET /api/v1/sucursales");
+        List<Sucursal> sucursales = sucursalService.obtenerSucursales();
+        CollectionModel<SucursalResponseDTO> collectionModel = assembler.toCollectionModel(sucursales)
+                .add(linkTo(methodOn(SucursalController.class).obtenerSucursales()).withSelfRel());
+        return ResponseEntity.ok(collectionModel);
     }
 
+    @Operation(summary = "Listar sucursales operativas (activas)")
     @GetMapping("/operativas")
-    public ResponseEntity<List<SucursalDTO>> obtenerSucursalesOperativas() {
-        List<SucursalDTO> sucursales = sucursalService
-                        .obtenerSucursalesOperativas();
-        return ResponseEntity.ok(sucursales);
+    public ResponseEntity<CollectionModel<SucursalResponseDTO>> obtenerSucursalesOperativas() {
+        log.info("GET /api/v1/sucursales/operativas");
+        List<Sucursal> sucursales = sucursalService.obtenerSucursalesOperativas();
+        CollectionModel<SucursalResponseDTO> collectionModel = assembler.toCollectionModel(sucursales)
+                .add(linkTo(methodOn(SucursalController.class).obtenerSucursalesOperativas()).withSelfRel());
+        return ResponseEntity.ok(collectionModel);
     }
 
-    // GET → BUSCAR SUCURSAL POR ID
+    @Operation(summary = "Buscar sucursal por id")
     @GetMapping("/{id}")
-    public ResponseEntity<SucursalDTO>
-    obtenerSucursalPorId(@PathVariable Integer id) {
-        SucursalDTO sucursal = sucursalService.obtenerSucursalPorId(id);
-        if (sucursal == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(sucursal);
+    public ResponseEntity<SucursalResponseDTO> obtenerSucursalPorId(@PathVariable Integer id) {
+        log.info("GET /api/v1/sucursales/{}", id);
+        Sucursal sucursal = sucursalService.obtenerSucursalPorId(id);
+        return ResponseEntity.ok(assembler.toModel(sucursal));
     }
 
-    // POST → CREAR NUEVA SUCURSAL
+    @Operation(summary = "Crear una nueva sucursal")
     @PostMapping
-    public ResponseEntity<SucursalDTO>
-    guardarSucursal(@Valid @RequestBody SucursalDTO dto) {
-        SucursalDTO guardada = sucursalService.guardarSucursal(dto);
-        if (guardada == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(guardada);
+    public ResponseEntity<SucursalResponseDTO> guardarSucursal(@Valid @RequestBody SucursalRequestDTO dto) {
+        log.info("POST /api/v1/sucursales - nombre={}", dto.getNombre());
+        Sucursal guardada = sucursalService.guardarSucursal(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(assembler.toModel(guardada));
     }
 
-    // PUT → ACTUALIZAR SUCURSAL
+    @Operation(summary = "Actualizar una sucursal existente")
     @PutMapping("/{id}")
-    public ResponseEntity<SucursalDTO>
-    actualizarSucursal(@PathVariable Integer id, @Valid @RequestBody SucursalDTO dto) {
-        SucursalDTO actualizada =
-                sucursalService.actualizarSucursal(id, dto);
-        if (actualizada == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(actualizada);
+    public ResponseEntity<SucursalResponseDTO> actualizarSucursal(
+            @PathVariable Integer id, @Valid @RequestBody SucursalRequestDTO dto) {
+        log.info("PUT /api/v1/sucursales/{}", id);
+        Sucursal actualizada = sucursalService.actualizarSucursal(id, dto);
+        return ResponseEntity.ok(assembler.toModel(actualizada));
     }
 
-    // DELETE → ELIMINAR SUCURSAL
+    @Operation(summary = "Eliminar una sucursal")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarSucursal(@PathVariable Integer id) {
-        boolean eliminada = sucursalService.eliminarSucursal(id);
-        if (!eliminada) {
-            return ResponseEntity.notFound().build();
-        }
+        log.info("DELETE /api/v1/sucursales/{}", id);
+        sucursalService.eliminarSucursal(id);
         return ResponseEntity.noContent().build();
     }
 }

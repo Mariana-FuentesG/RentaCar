@@ -13,6 +13,8 @@
         <option value="$PROJECT_DIR$/ms-sucursales/ms-sucursales/pom.xml" />
         <option value="$PROJECT_DIR$/Externos/pom.xml" />
         <option value="$PROJECT_DIR$/eureka-server/pom.xml" />
+        <option value="$PROJECT_DIR$/eureka-server/eureka-server/pom.xml" />
+        <option value="$PROJECT_DIR$/api-gateway/api-gateway/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

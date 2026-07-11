@@ -3,100 +3,97 @@ package com.prueba.ms_reportes.service;
 import com.prueba.ms_reportes.client.PagoClient;
 import com.prueba.ms_reportes.client.ReservaClient;
 import com.prueba.ms_reportes.dto.PagoDTO;
-import com.prueba.ms_reportes.dto.ReporteDTO;
 import com.prueba.ms_reportes.dto.ReservaDTO;
+import com.prueba.ms_reportes.dto.request.ReporteRequestDTO;
 import com.prueba.ms_reportes.exception.ResourceNotFoundException;
 import com.prueba.ms_reportes.mapper.ReporteMapper;
 import com.prueba.ms_reportes.model.Reporte;
 import com.prueba.ms_reportes.repository.ReporteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+/**
+ * Trabaja con entidades; la conversión a DTO + enlaces HATEOAS la hace el assembler.
+ */
 @Service
 public class ReporteService {
-    @Autowired
-    ReporteRepository reporteRepository;
-    @Autowired
-    ReservaClient reservaClient;
-    @Autowired
-    PagoClient pagoClient;
 
-    // GET → LISTAR TODOS LOS REPORTES
-    public List<ReporteDTO> obtenerReportes(){
-        return reporteRepository.findAll()
-                .stream()
-                .map(ReporteMapper::toDTO)
-                .collect(Collectors.toList());
+    private static final Logger log = LoggerFactory.getLogger(ReporteService.class);
+
+    private final ReporteRepository reporteRepository;
+    private final ReservaClient reservaClient;
+    private final PagoClient pagoClient;
+
+    public ReporteService(ReporteRepository reporteRepository, ReservaClient reservaClient, PagoClient pagoClient) {
+        this.reporteRepository = reporteRepository;
+        this.reservaClient = reservaClient;
+        this.pagoClient = pagoClient;
     }
 
-    // GET → OBTENER REPORTE POR ID
-    public ReporteDTO obtenerReportePorId(Integer id){
-        Reporte reporte = reporteRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Reporte no encontrado con id: " + id));
-        return ReporteMapper.toDTO(reporte);
+    public List<Reporte> obtenerReportes() {
+        log.info("Listando todos los reportes");
+        return reporteRepository.findAll();
     }
 
-    // POST → GUARDAR REPORTE
-    public ReporteDTO guardarReporte(ReporteDTO dto){
+    public Reporte obtenerReportePorId(Integer id) {
+        log.info("Buscando reporte con id {}", id);
+        return reporteRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn("Reporte con id {} no encontrado", id);
+                    return new ResourceNotFoundException("Reporte no encontrado con id: " + id);
+                });
+    }
+
+    public Reporte guardarReporte(ReporteRequestDTO dto) {
+        log.info("Creando nuevo reporte: {}", dto.getTitulo());
         Reporte reporte = ReporteMapper.toEntity(dto);
         Reporte guardado = reporteRepository.save(reporte);
-        return ReporteMapper.toDTO(guardado);
+        log.info("Reporte creado con id {}", guardado.getId());
+        return guardado;
     }
 
-    // PUT → ACTUALIZAR REPORTE
-    public ReporteDTO actualizarReporte(Integer id, ReporteDTO dto){
-        try{Reporte reporte = reporteRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Reporte no encontrado con id: " + id));
+    public Reporte actualizarReporte(Integer id, ReporteRequestDTO dto) {
+        log.info("Actualizando reporte con id {}", id);
+        Reporte reporte = reporteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reporte no encontrado con id: " + id));
 
-            // ACTUALIZAR CAMPOS INDIVIDUALMENTE
-            reporte.setTitulo(dto.getTitulo());
-            reporte.setDescripcion(dto.getDescripcion());
-            reporte.setTotalReservas(dto.getTotalReservas());
-            reporte.setTotalIngresos(dto.getTotalIngresos());
-            reporte.setActivo(dto.getActivo());
-            reporte.setFechaGeneracion(dto.getFechaGeneracion());
+        reporte.setTitulo(dto.getTitulo());
+        reporte.setDescripcion(dto.getDescripcion());
+        reporte.setTotalReservas(dto.getTotalReservas());
+        reporte.setTotalIngresos(dto.getTotalIngresos());
+        reporte.setActivo(dto.getActivo());
+        reporte.setFechaGeneracion(dto.getFechaGeneracion());
 
-            Reporte actualizado = reporteRepository.save(reporte);
-            return ReporteMapper.toDTO(actualizado);
-        } catch (Exception e) {
-            throw new RuntimeException(
-                    "Error al actualizar reporte");
+        Reporte actualizado = reporteRepository.save(reporte);
+        log.info("Reporte con id {} actualizado correctamente", id);
+        return actualizado;
+    }
+
+    public void eliminarReporte(Integer id) {
+        log.info("Eliminando reporte con id {}", id);
+        if (!reporteRepository.existsById(id)) {
+            log.warn("Intento de eliminar reporte inexistente con id {}", id);
+            throw new ResourceNotFoundException("Reporte no encontrado con id: " + id);
         }
+        reporteRepository.deleteById(id);
+        log.info("Reporte con id {} eliminado", id);
     }
 
-    // DELETE → ELIMINAR REPORTE
-    public boolean eliminarReporte(Integer id){
-        try{
-            if(!reporteRepository.existsById(id)){
-                return false;}
-            reporteRepository.deleteById(id);
-            return true;
-        }catch (Exception e){
-            return false;}
+    public List<Reporte> obtenerReportesActivos() {
+        log.info("Listando reportes activos");
+        return reporteRepository.findByActivoTrue();
     }
 
-    public List<ReporteDTO> obtenerReportesActivos(){
-        return reporteRepository.findByActivoTrue()
-                .stream()
-                .map(ReporteMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    // CONSOLIDAR RESERVAS
-    public List<ReservaDTO> obtenerReservas(){
+    public List<ReservaDTO> obtenerReservas() {
+        log.info("Consultando reservas via Feign a ms-reservas");
         return reservaClient.obtenerReservas();
     }
 
-    // CONSOLIDAR PAGOS
-    public List<PagoDTO> obtenerPagos(){
+    public List<PagoDTO> obtenerPagos() {
+        log.info("Consultando pagos via Feign a ms-pagos");
         return pagoClient.obtenerPagos();
     }
-
 }

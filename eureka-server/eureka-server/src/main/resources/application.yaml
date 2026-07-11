@@ -6,12 +6,6 @@ spring:
     name: eureka-server
 
 # SERVICIOS QUE SE REGISTRAN EN EUREKA:
-# MS-CLIENTES   → puerto 8081
-# MS-VEHICULOS  → puerto 8082
-# MS-RESERVAS   → puerto 8083
-# MS-PAGOS      → puerto 8084
-# API-GATEWAY   → puerto 8080
-
 eureka:
   client:
     register-with-eureka: false

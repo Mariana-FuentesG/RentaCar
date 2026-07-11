@@ -1,0 +1,24 @@
+# Configuración exclusiva para JUnit: H2 en memoria, sin depender de MySQL local.
+spring:
+  application:
+    name: ms-reportes
+  datasource:
+    url: jdbc:h2:mem:reportes_test;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
+  liquibase:
+    enabled: false
+  cloud:
+    compatibility-verifier:
+      enabled: false
+eureka:
+  client:
+    enabled: false
+springdoc:
+  enable-hateoas: false

@@ -2,6 +2,7 @@ databaseChangeLog:
   - changeSet:
       id: 2
       author: mariana
+      context: dev
       changes:
         # REPORTE 1
         - insert:
@@ -71,3 +72,49 @@ databaseChangeLog:
               - column:
                   name: fecha_generacion
                   valueDate: "2025-01-01"
+
+        # REPORTE 4
+        - insert:
+            tableName: REPORTES
+            columns:
+              - column:
+                  name: titulo
+                  value: "Reporte Trimestral"
+              - column:
+                  name: descripcion
+                  value: "Consolidado trimestral de operaciones"
+              - column:
+                  name: total_reservas
+                  valueNumeric: 60
+              - column:
+                  name: total_ingresos
+                  valueNumeric: 13500000
+              - column:
+                  name: activo
+                  valueBoolean: true
+              - column:
+                  name: fecha_generacion
+                  valueDate: "2025-04-01"
+
+        # REPORTE 5
+        - insert:
+            tableName: REPORTES
+            columns:
+              - column:
+                  name: titulo
+                  value: "Reporte Sucursal Sur"
+              - column:
+                  name: descripcion
+                  value: "Reporte de desempeño de sucursales de la zona sur"
+              - column:
+                  name: total_reservas
+                  valueNumeric: 18
+              - column:
+                  name: total_ingresos
+                  valueNumeric: 4100000
+              - column:
+                  name: activo
+                  valueBoolean: true
+              - column:
+                  name: fecha_generacion
+                  valueDate: "2025-06-15"

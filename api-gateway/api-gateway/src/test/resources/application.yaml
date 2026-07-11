@@ -1,0 +1,20 @@
+# Config exclusiva de test: evita que el contextLoads intente registrarse en un
+# Eureka real durante `mvn test`.
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: ms-sucursales
+            uri: http://localhost:8085
+            predicates:
+              - Path=/api/v1/sucursales/**,/api/v1/regiones/**
+          - id: ms-reportes
+            uri: http://localhost:8087
+            predicates:
+              - Path=/api/v1/reportes/**
+eureka:
+  client:
+    enabled: false
